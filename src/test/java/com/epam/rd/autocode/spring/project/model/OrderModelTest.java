@@ -77,14 +77,9 @@ public class OrderModelTest {
                 .orElseThrow(() -> new RuntimeException("No parameter with type " + Constants.LONG_TYPE));
 
         parameters.stream()
-                .filter(p -> p.getType().getTypeName().equals(Constants.CLIENT_TYPE))
+                .filter(p -> p.getType().getTypeName().equals(Constants.USER_TYPE))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No parameter with type " + Constants.CLIENT_TYPE));
-
-        parameters.stream()
-                .filter(p -> p.getType().getTypeName().equals(Constants.EMPLOYEE_TYPE))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("No parameter with type " + Constants.EMPLOYEE_TYPE));
+                .orElseThrow(() -> new RuntimeException("No parameter with type " + Constants.USER_TYPE));
 
         parameters.stream()
                 .filter(p -> p.getType().getTypeName().equals(Constants.LOCAL_DATE_TIME_TYPE))
@@ -119,8 +114,7 @@ public class OrderModelTest {
     @ParameterizedTest
     @CsvSource({
             "java.lang.Long, id, 1",
-            "com.epam.rd.autocode.spring.project.model.Client, client, 1",
-            "com.epam.rd.autocode.spring.project.model.Employee, employee, 1",
+            "com.epam.rd.autocode.spring.project.model.User, user, 1",
             "java.time.LocalDateTime, orderDate, 1",
             "java.math.BigDecimal, price, 1",
             "java.util.List, bookItems, 1"

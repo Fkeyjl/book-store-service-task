@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${book.name} + ' - ' + #{app.name}">Книга - Книжковий магазин</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/book-view.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{layouts/header.html::header}"></div>
+
+<div class="book-view-container">
+    <header class="book-view-header">
+        <h1 th:text="${book.name}">Назва книги</h1>
+        <p class="book-author"><i class="fas fa-user"></i> <span th:text="${book.author}">Автор</span></p>
+    </header>
+
+    <div class="book-info-grid">
+        <div class="book-image-section">
+            <div class="book-image-placeholder">
+                <i class="fas fa-book"></i>
+            </div>
+
+            <div sec:authorize="hasRole('CUSTOMER')" class="cart-actions">
+                <form th:action="@{/cart/add}" method="post" class="add-to-cart-form">
+                    <input type="hidden" name="bookId" th:value="${book.id}"/>
+                    <button type="submit" class="add-to-cart-button">
+                        <i class="fas fa-shopping-cart"></i> <span th:text="#{book.addToCart}">Додати в кошик</span>
+                    </button>
+                </form>
+            </div>
+
+            <div sec:authorize="hasRole('EMPLOYEE')" class="admin-actions">
+                <a th:href="@{/books/{id}/edit(id=${book.id})}" class="edit-button">
+                    <i class="fas fa-edit"></i> <span th:text="#{common.edit}">Редагувати</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="book-details-section">
+            <div class="price-section">
+                <span class="price-label" th:text="#{book.price} + ':'">Ціна:</span>
+                <span class="price-value" th:text="${book.price} + ' UAH'">0.00 UAH</span>
+            </div>
+
+            <div class="info-list">
+                <div class="info-item">
+                    <span class="info-label"><i class="fas fa-barcode"></i> <span
+                            th:text="#{book.isbn} + ':'">ISBN:</span></span>
+                    <span class="info-value" th:text="${book.isbn}">N/A</span>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label"><i class="fas fa-calendar-alt"></i> <span
+                            th:text="#{book.publicationDate} + ':'">Дата публікації:</span></span>
+                    <span class="info-value" th:text="${book.publicationDate}">N/A</span>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label"><i class="fas fa-file-alt"></i> <span th:text="#{book.pages} + ':'">Кількість сторінок:</span></span>
+                    <span class="info-value" th:text="${book.pages}">0</span>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label"><i class="fas fa-language"></i> <span th:text="#{book.language} + ':'">Мова:</span></span>
+                    <span class="info-value" th:text="${book.language}">N/A</span>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label"><i class="fas fa-child"></i> <span th:text="#{book.ageGroup} + ':'">Вікова група:</span></span>
+                    <span class="info-value" th:text="${book.ageGroup}">N/A</span>
+                </div>
+
+                <div class="info-item categories-item"
+                     th:if="${book.categories != null and !book.categories.isEmpty()}">
+                    <span class="info-label"><i class="fas fa-tags"></i> <span th:text="#{nav.categories} + ':'">Категорії:</span></span>
+                    <div class="categories-list">
+                            <span th:each="category, iterStat : ${book.categories}" class="category-badge">
+                                <span th:text="${category.name}">Категорія</span>
+                                <span th:if="${!iterStat.last}">, </span>
+                            </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-block" th:if="${book.characteristics != null and !book.characteristics.isEmpty()}">
+                <h3><i class="fas fa-list-ul"></i> <span th:text="#{book.characteristics}">Характеристики</span></h3>
+                <p th:text="${book.characteristics}">Характеристики книги</p>
+            </div>
+
+            <div class="section-block" th:if="${book.description != null and !book.description.isEmpty()}">
+                <h3><i class="fas fa-info-circle"></i> <span th:text="#{book.description}">Опис</span></h3>
+                <p th:text="${book.description}">Опис книги</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation-actions">
+        <a th:href="@{/books}" class="back-button">
+            <i class="fas fa-arrow-left"></i> <span th:text="#{common.back}">Повернутися до каталогу</span>
+        </a>
+    </div>
+</div>
+
+<script th:src="@{/js/book.js}"></script>
+</body>
+</html>

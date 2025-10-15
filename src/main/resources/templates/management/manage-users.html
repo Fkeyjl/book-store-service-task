@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Управління клієнтами</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/manage-users.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{layouts/header.html::header}"></div>
+
+<div class="container">
+    <h2>Керування клієнтами</h2>
+
+    <table class="client-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ім'я</th>
+            <th>Email</th>
+            <th>Баланс</th>
+            <th>Статус</th>
+            <th>Дія</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="customer : ${customers}">
+            <td th:text="${customer.id}">1</td>
+            <td th:text="${customer.name}">Іван Іваненко</td>
+            <td th:text="${customer.email}">ivan@example.com</td>
+            <td th:text="${customer.balance}">100.00</td>
+
+            <td>
+                <span th:if="${customer.isBlocked}" class="status-blocked">Заблоковано</span>
+                <span th:unless="${customer.isBlocked}" class="status-active">Активний</span>
+            </td>
+
+            <td>
+                <div th:if="${customer.isBlocked}" class="action-form">
+                    <form th:action="@{/management/users/{id}/unblock(id=${customer.id})}" method="post">
+                        <button type="submit" class="action-button unblock-button">
+                            <i class="fas fa-unlock"></i> Розблокувати
+                        </button>
+                    </form>
+                </div>
+
+                <div th:unless="${customer.isBlocked}" class="action-form">
+                    <form th:action="@{/management/users/{id}/block(id=${customer.id})}" method="post">
+                        <button type="submit" class="action-button block-button"
+                                onclick="return confirm('Ви впевнені, що хочете заблокувати цього користувача?')">
+                            <i class="fas fa-lock"></i> Заблокувати
+                        </button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

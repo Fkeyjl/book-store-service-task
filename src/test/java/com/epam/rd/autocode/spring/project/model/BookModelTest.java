@@ -99,7 +99,7 @@ public class BookModelTest {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("No parameter with type " + Constants.LANGUAGE_TYPE));
 
-        assertEquals(11, parameters.size());
+        assertEquals(12, parameters.size());
     }
 
     @Test

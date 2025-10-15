@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{nav.cart} + ' - ' + #{app.name}">Кошик - Книжковий магазин</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/cart.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{layouts/header.html::header}"></div>
+
+<div class="cart-container">
+    <h2><i class="fas fa-shopping-cart"></i> <span th:text="#{cart.title}">Ваш кошик</span></h2>
+
+    <div th:if="${cart.items.isEmpty()}" class="empty-cart-message">
+        <i class="fas fa-shopping-basket" style="font-size: 4rem; color: #bbb; margin-bottom: 20px;"></i>
+        <p th:text="#{message.emptyCart}">Ваш кошик порожній</p>
+        <a th:href="@{/books}" class="continue-shopping">
+            <i class="fas fa-book"></i> <span th:text="#{common.continueShopping}">Продовжити покупки</span>
+        </a>
+    </div>
+
+    <div th:unless="${cart.items.isEmpty()}">
+        <table class="cart-table">
+            <thead>
+            <tr>
+                <th th:text="#{cart.book}">Книга</th>
+                <th th:text="#{cart.quantity}">Кількість</th>
+                <th th:text="#{cart.pricePerUnit}">Ціна за одиницю</th>
+                <th th:text="#{cart.total}">Всього</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${cartDetails}">
+                <td>
+                    <i class="fas fa-book" style="margin-right: 8px; color: #7f8c8d;"></i>
+                    <span th:text="${item.book.name}">Назва книги</span>
+                </td>
+                <td>×<span th:text="${item.quantity}">2</span></td>
+                <td><span th:text="${item.book.price}">150.00</span> грн</td>
+                <td><strong><span th:text="${item.totalPrice}">300.00</span> грн</strong></td>
+                <td>
+                    <form th:action="@{/cart/remove/{bookId}(bookId=${item.book.id})}" method="post" style="margin: 0;">
+                        <button type="submit" class="remove-button" th:title="#{cart.remove}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="cart-summary">
+            <h3><i class="fas fa-calculator"></i> <span th:text="#{cart.summary}">Підсумок</span></h3>
+            <p>
+                <span th:text="#{cart.quantity} + ':'">Кількість позицій:</span>
+                <span th:text="${cart.totalQuantity}">0</span>
+            </p>
+            <p>
+                <span th:text="#{cart.total} + ':'">Загальна сума:</span>
+                <span class="total-price" th:text="${cart.totalPrice}">0.00</span>
+            </p>
+
+            <form th:action="@{/cart/checkout}" method="post">
+                <button type="submit" class="checkout-button">
+                    <i class="fas fa-check-circle"></i> <span th:text="#{cart.checkout}">Оформити замовлення</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

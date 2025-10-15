@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{book.editBook} + ' - ' + #{app.name}">Редагувати книгу - Книжковий магазин</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/book.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{layouts/header.html::header}"></div>
+
+<div class="book-container">
+    <header class="book-header">
+        <h1><i class="fas fa-edit"></i> <span th:text="#{book.editBook}">Редагувати книгу</span></h1>
+    </header>
+
+    <form class="book-form" th:action="@{/books/{id}/edit(id=${bookId})}" th:object="${book}" method="post">
+
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="form-group">
+            <label for="name">Назва книги</label>
+            <input type="text" id="name" th:field="*{name}" placeholder="Введіть назву книги">
+        </div>
+
+        <div class="form-group">
+            <label for="author">Автор</label>
+            <input type="text" id="author" th:field="*{author}" placeholder="Ім'я автора">
+        </div>
+
+        <div class="form-group">
+            <label for="isbn">ISBN</label>
+            <input type="text" id="isbn" th:field="*{isbn}" placeholder="978-3-16-148410-0">
+        </div>
+
+        <div class="form-group">
+            <label for="price">Ціна (UAH)</label>
+            <input type="number" step="0.01" id="price" th:field="*{price}" min="0" placeholder="0.00">
+        </div>
+
+        <div class="form-group">
+            <label>Категорії</label>
+            <div class="checkbox-group">
+                <div th:each="category : ${allCategories}" class="checkbox-item">
+                    <input type="checkbox"
+                           th:id="${'category_' + category.id}"
+                           th:field="*{categories}"
+                           th:value="${category.id}">
+                    <label th:for="${'category_' + category.id}" th:text="${category.name}">Категорія</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="ageGroup">Вікова група</label>
+            <select id="ageGroup" th:field="*{ageGroup}">
+                <option th:each="group : ${allAgeGroups}"
+                        th:value="${group}"
+                        th:text="${group.name()}"
+                        th:selected="${group == book.ageGroup}">Група
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="language">Мова</label>
+            <select id="language" th:field="*{language}">
+                <option th:each="lang : ${allLanguages}"
+                        th:value="${lang}"
+                        th:text="${lang.name()}"
+                        th:selected="${lang == book.language}">Мова
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="pub_date">Дата публікації</label>
+            <input type="text" id="pub_date" th:field="*{publicationDate}">
+        </div>
+
+        <div class="form-group">
+            <label for="pages">Кількість сторінок</label>
+            <input type="number" id="pages" th:field="*{pages}" min="1" placeholder="0">
+        </div>
+
+        <div class="form-group">
+            <label for="characteristics">Характеристики</label>
+            <textarea id="characteristics" th:field="*{characteristics}" rows="3"
+                      placeholder="Короткі характеристики книги"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Опис</label>
+            <textarea id="description" th:field="*{description}" rows="5" placeholder="Детальний опис книги"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="submit-button">
+                <i class="fas fa-save"></i> <span th:text="#{common.save}">Зберегти зміни</span>
+            </button>
+        </div>
+    </form>
+
+    <form class="delete-form"
+          th:action="@{/books/{id}/delete(id=${book.id})}"
+          method="post"
+          th:onsubmit="'return confirm(\'' + #{book.deleteConfirm} + '\');'">
+
+        <input type="hidden" name="_method" value="DELETE"/>
+
+        <button type="submit" class="delete-button">
+            <i class="fas fa-trash-alt"></i> <span th:text="#{book.deleteBook}">Видалити книгу</span>
+        </button>
+    </form>
+</div>
+</body>
+</html>

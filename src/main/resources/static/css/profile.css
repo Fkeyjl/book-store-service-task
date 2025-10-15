@@ -1,0 +1,293 @@
+:root {
+    --profile-primary: #00a651;
+    --profile-primary-hover: #008f44;
+    --profile-danger: #e74c3c;
+    --profile-danger-hover: #c0392b;
+    --profile-bg: #f7f7f7;
+    --profile-card-bg: #ffffff;
+    --profile-text: #2c3e50;
+    --profile-text-light: #7f8c8d;
+    --profile-border: #ddd;
+    --profile-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --profile-radius: 10px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--profile-bg);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.profile-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+details {
+    background-color: var(--profile-card-bg);
+    border-radius: var(--profile-radius);
+    box-shadow: var(--profile-shadow);
+    margin-bottom: 25px;
+    overflow: hidden;
+}
+
+details summary {
+    padding: 20px 25px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--profile-text);
+    cursor: pointer;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+details summary:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+}
+
+details[open] summary {
+    border-bottom: 2px solid var(--profile-primary);
+}
+
+.user-display-block {
+    padding: 25px 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.user-display-block p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--profile-text-light);
+}
+
+.user-display-block strong {
+    color: var(--profile-text);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.user-display-block span {
+    color: var(--profile-text);
+    font-weight: 500;
+}
+
+.accordion {
+    width: 100%;
+    background-color: #f8f9fa;
+    color: var(--profile-text);
+    padding: 16px 25px;
+    border: none;
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.accordion::after {
+    content: '\002B';
+    font-size: 1.2rem;
+    color: var(--profile-primary);
+    float: right;
+    font-weight: 700;
+}
+
+.accordion.active::after {
+    content: '\2212';
+}
+
+.accordion:hover {
+    background-color: #e9ecef;
+}
+
+.accordion.active {
+    background-color: var(--profile-primary);
+    color: white;
+}
+
+.accordion.active::after {
+    color: white;
+}
+
+.delete-accordion {
+    background-color: #fee;
+    color: var(--profile-danger);
+}
+
+.delete-accordion::after {
+    color: var(--profile-danger);
+}
+
+.delete-accordion:hover {
+    background-color: #fdd;
+}
+
+.delete-accordion.active {
+    background-color: var(--profile-danger);
+    color: white;
+}
+
+.delete-accordion.active::after {
+    color: white;
+}
+
+.panel {
+    padding: 0;
+    background-color: var(--profile-card-bg);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+
+.panel.active {
+    padding: 25px 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: var(--profile-text);
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--profile-border);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #fafafa;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--profile-primary);
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(0, 166, 81, 0.1);
+}
+
+.form-group input[readonly] {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.save-button {
+    padding: 12px 30px;
+    background-color: var(--profile-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.save-button:hover {
+    background-color: var(--profile-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 166, 81, 0.3);
+}
+
+.save-button:active {
+    transform: translateY(0);
+}
+
+.delete-button {
+    padding: 12px 30px;
+    background-color: var(--profile-danger);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: var(--profile-danger-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+}
+
+.delete-button:active {
+    transform: translateY(0);
+}
+
+.order-card {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--profile-primary);
+    margin-bottom: 20px;
+}
+
+.order-card p {
+    margin: 8px 0;
+    color: var(--profile-text-light);
+}
+
+.order-card strong {
+    color: var(--profile-text);
+}
+
+.order-item-list {
+    margin: 10px 0;
+    padding-left: 20px;
+    color: var(--profile-text-light);
+}
+
+.order-item-list li {
+    margin-bottom: 5px;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+
+    .user-display-block {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+
+    details summary {
+        font-size: 1.1rem;
+        padding: 16px 20px;
+    }
+
+    .accordion {
+        font-size: 1rem;
+        padding: 14px 20px;
+    }
+
+    .panel.active {
+        padding: 20px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .accordion,
+    .panel,
+    .save-button,
+    .delete-button {
+        transition: none;
+    }
+}

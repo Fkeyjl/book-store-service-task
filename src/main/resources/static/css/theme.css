@@ -1,0 +1,63 @@
+:root {
+    --body-bg: #f7f7f7;
+    --body-text: #2c3e50;
+    --card-bg: #ffffff;
+    --border-color: #e0e0e0;
+    --primary-color: #00a651;
+    --primary-hover: #008a43;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+    --body-bg: #0f0f1e;
+    --body-text: #eaeaea;
+    --card-bg: #1a1a2e;
+    --border-color: #2d2d44;
+    --primary-color: #00d9ff;
+    --primary-hover: #00b8d4;
+    --shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+body {
+    background-color: var(--body-bg) !important;
+    color: var(--body-text) !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+[data-theme="dark"] .book-card,
+[data-theme="dark"] .category-card,
+[data-theme="dark"] .filter-sidebar,
+[data-theme="dark"] .book-details-section,
+[data-theme="dark"] .book-view-container,
+[data-theme="dark"] .profile-container,
+[data-theme="dark"] .cart-container {
+    background-color: var(--card-bg);
+    color: var(--body-text);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+    background-color: #16213e;
+    color: var(--body-text);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] select:focus,
+[data-theme="dark"] textarea:focus {
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] button {
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] a {
+    color: var(--primary-color);
+}
+
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{book.create} + ' - ' + #{app.name}">Створити книгу - Книжковий магазин</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/create-book.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{layouts/header.html::header}"></div>
+
+<div class="form-container">
+    <h2><i class="fas fa-plus-circle"></i> <span th:text="#{book.create}">Створення нової книги</span></h2>
+
+    <form class="book-form" th:action="@{/books/create}" th:object="${bookDTO}" method="post">
+
+        <div class="form-group">
+            <label for="name">Назва книги</label>
+            <input type="text" id="name" th:field="*{name}" placeholder="Введіть назву книги" required/>
+        </div>
+
+        <div class="form-group">
+            <label for="author">Автор</label>
+            <input type="text" id="author" th:field="*{author}" placeholder="Ім'я автора" required/>
+        </div>
+
+        <div class="form-group">
+            <label for="isbn">ISBN</label>
+            <input type="text" id="isbn" th:field="*{isbn}" placeholder="978-3-16-148410-0" required/>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Ціна (грн)</label>
+            <input type="number" id="price" th:field="*{price}" step="0.01" min="0" placeholder="0.00" required/>
+        </div>
+
+        <div class="form-group">
+            <label for="language">Мова</label>
+            <select id="language" th:field="*{language}" required>
+                <option value="">Оберіть мову</option>
+                <option th:each="lang : ${allLanguages}"
+                        th:value="${lang}"
+                        th:text="${lang.toString()}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="ageGroup">Вікова група</label>
+            <select id="ageGroup" th:field="*{ageGroup}" required>
+                <option value="">Оберіть вікову групу</option>
+                <option th:each="group : ${allAgeGroups}"
+                        th:value="${group}"
+                        th:text="${group.toString()}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="publicationDate">Дата публікації</label>
+            <input type="date" id="publicationDate" th:field="*{publicationDate}" required/>
+        </div>
+
+        <div class="form-group">
+            <label for="pages">Кількість сторінок</label>
+            <input type="number" id="pages" th:field="*{pages}" min="1" placeholder="0" required/>
+        </div>
+
+        <div class="form-group">
+            <label>Категорії</label>
+            <div class="checkbox-group">
+                <div th:each="category : ${allCategories}">
+                    <input type="checkbox"
+                           th:id="${'cat_' + category.id}"
+                           th:field="*{categories}"
+                           th:value="${category.id}"/>
+                    <label th:for="${'cat_' + category.id}" th:text="${category.name}">Категорія</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="characteristics">Характеристики</label>
+            <textarea id="characteristics" th:field="*{characteristics}" rows="3"
+                      placeholder="Короткі характеристики книги"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Опис</label>
+            <textarea id="description" th:field="*{description}" rows="5" placeholder="Детальний опис книги"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="submit-button">
+                <i class="fas fa-check-circle"></i> <span th:text="#{book.create}">Створити книгу</span>
+            </button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

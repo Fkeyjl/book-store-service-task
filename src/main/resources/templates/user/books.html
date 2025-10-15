@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Books</title>
+    <link rel="stylesheet" type=text/css th:href="@{/css/header.css}">
+    <link rel="stylesheet" type=text/css th:href="@{/css/books.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{layouts/header.html::header}"></div>
+<div class="book-section">
+    <div class="main-content-wrapper">
+        <div class="filter-sidebar">
+            <h3 class="filter-title"><i class="fas fa-filter"></i> <span th:text="#{common.filter}">Фільтр</span></h3>
+            <form th:action="@{/books}" method="get" id="filterForm">
+                <div class="filter-group">
+                    <h4 th:text="#{common.search}">Пошук</h4>
+                    <input type="text" name="search" th:placeholder="#{common.search}"
+                           class="filter-input" th:value="${param.search}">
+                </div>
+
+                <div class="filter-group">
+                    <h4 th:text="#{filter.language}">Мова</h4>
+                    <select name="language" class="filter-select">
+                        <option value="" th:text="#{filter.allLanguages}">Усі мови</option>
+                        <option th:each="lang : ${T(com.epam.rd.autocode.spring.project.model.enums.Language).values()}"
+                                th:value="${lang}"
+                                th:text="${lang.name()}"
+                                th:selected="${param.language != null and param.language[0] == lang.name()}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <h4 th:text="#{filter.ageGroup}">Вікова група</h4>
+                    <select name="ageGroup" class="filter-select">
+                        <option value="" th:text="#{filter.allAgeGroups}">Усі групи</option>
+                        <option th:each="age : ${T(com.epam.rd.autocode.spring.project.model.enums.AgeGroup).values()}"
+                                th:value="${age}"
+                                th:text="${age.name()}"
+                                th:selected="${param.ageGroup != null and param.ageGroup[0] == age.name()}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <h4 th:text="#{filter.price} + ' (UAH)'">Ціна (UAH)</h4>
+                    <input type="number" name="minPrice" th:placeholder="#{filter.minPrice}" min="0" step="0.01"
+                           class="price-input" th:value="${param.minPrice}">
+                    <input type="number" name="maxPrice" th:placeholder="#{filter.maxPrice}" min="0" step="0.01"
+                           class="price-input" th:value="${param.maxPrice}">
+                </div>
+
+                <button type="submit" class="apply-filter-button">
+                    <i class="fas fa-check"></i> <span th:text="#{common.apply}">Застосувати</span>
+                </button>
+                <a th:href="@{/books}" class="reset-filter-button">
+                    <i class="fas fa-redo"></i> <span th:text="#{common.reset}">Скинути</span>
+                </a>
+            </form>
+        </div>
+        <div class="content-area">
+            <div class="sort-options">
+                <label for="sort-by" th:text="#{sort.label}">Сортувати за:</label>
+                <select id="sort-by" name="sort" onchange="document.getElementById('filterForm').submit();"
+                        form="filterForm">
+                    <option value="" th:text="#{sort.default}">За замовчуванням</option>
+                    <option value="name" th:selected="${param.sort != null and param.sort[0] == 'name'}"
+                            th:text="#{sort.name}">Назва (А-Я)
+                    </option>
+                    <option value="author" th:selected="${param.sort != null and param.sort[0] == 'author'}"
+                            th:text="#{sort.author}">Автор (А-Я)
+                    </option>
+                    <option value="price_asc" th:selected="${param.sort != null and param.sort[0] == 'price_asc'}"
+                            th:text="#{sort.priceAsc}">Ціна (зростання)
+                    </option>
+                    <option value="price_desc" th:selected="${param.sort != null and param.sort[0] == 'price_desc'}"
+                            th:text="#{sort.priceDesc}">Ціна (спадання)
+                    </option>
+                    <option value="date_desc" th:selected="${param.sort != null and param.sort[0] == 'date_desc'}"
+                            th:text="#{sort.newest}">Новинки
+                    </option>
+                </select>
+            </div>
+            <div class="book-container">
+                <a th:each="book : ${books}"
+                   th:href="@{/books/{id}(id=${book.id})}"
+                   class="book-card-link">
+                    <div class="book-card">
+                        <div class="book-image">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="book-info">
+                            <h3 class="book-title" th:text="${book.name}">Назва книги</h3>
+                            <p class="book-author" th:text="${book.author}">Автор</p>
+                            <div class="book-meta">
+                                <span class="book-price" th:text="${book.price} + ' UAH'">0.00 UAH</span>
+                                <span class="book-language" th:text="${book.language}">Мова</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <p th:if="${#lists.isEmpty(books)}" class="empty-message">
+                    <i class="fas fa-search"></i> <span th:text="#{message.noBooksFound}">На жаль, за вашим запитом книг не знайдено.</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

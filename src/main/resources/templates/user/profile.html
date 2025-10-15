@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{profile.title} + ' - ' + #{app.name}">Профіль - Книжковий магазин</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/profile.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{layouts/header.html::header}"></div>
+
+<div class="profile-container">
+    <details th:object="${user}" open>
+        <summary><i class="fas fa-user-circle"></i> <span th:text="#{profile.personalInfo}">Особистий Кабінет</span>
+        </summary>
+
+        <div class="user-display-block">
+            <p><strong th:text="#{profile.name}">Ім'я</strong> <span th:text="*{name}">Користувач</span></p>
+            <p><strong th:text="#{profile.email}">Email</strong> <span th:text="*{email}">email@example.com</span></p>
+            <p><strong th:text="#{profile.phone}">Телефон</strong> <span th:text="*{phone} ?: #{profile.notSpecified}">+380...</span>
+            </p>
+            <p><strong th:text="#{profile.birthDate}">Дата народження</strong> <span
+                    th:text="*{birthDate} ?: #{profile.notSpecified}">01.01.2000</span></p>
+            <p><strong th:text="#{profile.balance}">Баланс</strong> <span th:text="*{balance}">0.00</span> UAH</p>
+        </div>
+
+        <button class="accordion edit-profile-button">
+            <i class="fas fa-edit"></i> <span th:text="#{profile.editData}">Редагувати дані</span>
+        </button>
+
+        <div class="panel">
+            <form th:action="@{/profile/edit}" method="post" th:object="${userForm}">
+                <input type="hidden" th:field="*{id}"/>
+
+                <div class="form-group">
+                    <label for="name" th:text="#{profile.name}">Ім'я</label>
+                    <input type="text" id="name" th:field="*{name}" th:placeholder="#{auth.usernamePlaceholder}"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" th:text="#{profile.email}">Email</label>
+                    <input type="email" id="email" th:field="*{email}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone" th:text="#{profile.phone}">Телефон</label>
+                    <input type="tel" id="phone" th:field="*{phone}" placeholder="+380...">
+                </div>
+
+                <div class="form-group">
+                    <label for="birthDate" th:text="#{profile.birthDate}">Дата народження</label>
+                    <input type="date" id="birthDate" th:field="*{birthDate}">
+                </div>
+
+                <button type="submit" class="save-button">
+                    <i class="fas fa-save"></i> <span th:text="#{profile.updateProfile}">Оновити профіль</span>
+                </button>
+            </form>
+        </div>
+    </details>
+
+    <details th:object="${user}">
+        <summary><i class="fas fa-shopping-bag"></i> <span th:text="#{profile.orderHistory}">Історія замовлень</span>
+        </summary>
+
+        <button class="accordion">
+            <i class="fas fa-list"></i> <span th:text="#{profile.myOrders}">Мої замовлення</span> (<span
+                th:text="${orders.size()}">0</span>)
+        </button>
+
+        <div class="panel">
+            <div th:if="${orders.isEmpty()}">
+                <p style="text-align: center; color: #7f8c8d; padding: 40px 20px;">
+                    <i class="fas fa-box-open" style="font-size: 3rem; display: block; margin-bottom: 15px;"></i>
+                    <span th:text="#{profile.noOrders}">У вас ще немає жодного замовлення</span>
+                </p>
+            </div>
+            <div th:unless="${orders.isEmpty()}">
+                <div th:each="order : ${orders}" class="order-card">
+                    <p><strong><i class="fas fa-receipt"></i> <span th:text="#{profile.orderNumber}">Замовлення #</span><span
+                            th:text="${order.id}">1</span></strong>
+                        від <span th:text="${#temporals.format(order.orderDate, 'dd.MM.yyyy HH:mm')}">10.10.2025</span>
+                    </p>
+                    <p><strong>Статус:</strong> <span th:text="${order.status.name()}">PENDING</span></p>
+                    <p><strong>Сума:</strong> <span th:text="${order.price}">66.48</span> UAH</p>
+
+                    <p><strong>Деталі:</strong> (<span th:text="${order.bookItems.size()}">1</span> позицій)</p>
+                    <ul class="order-item-list">
+                        <li th:each="item : ${order.bookItems}">
+                            <i class="fas fa-book"></i>
+                            <span th:text="${item.book.name}">Назва книги</span>
+                            (×<span th:text="${item.quantity}">1</span>) —
+                            <span th:text="${item.pricePerUnit}">150</span> UAH/од.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </details>
+
+    <details sec:authorize="hasRole('CUSTOMER')">
+        <summary style="color: #e74c3c;"><i class="fas fa-exclamation-triangle"></i> <span
+                th:text="#{profile.deleteAccount}">Видалити акаунт</span></summary>
+
+        <button class="accordion delete-accordion">
+            <i class="fas fa-trash-alt"></i> <span th:text="#{profile.deleteAccount}">Видалити акаунт</span>
+        </button>
+
+        <div class="panel">
+            <p style="color: #e74c3c; font-weight: 500; margin-bottom: 20px;">
+                ⚠️ <span th:text="#{profile.deleteAccountConfirm}">Ви впевнені, що хочете видалити свій акаунт? Ця дія є незворотною та призведе до видалення всіх ваших даних.</span>
+            </p>
+            <form th:action="@{/profile/delete}" method="post"
+                  th:onsubmit="'return confirm(\'' + #{profile.deleteAccountConfirm} + '\');'">
+                <button type="submit" class="delete-button">
+                    <i class="fas fa-ban"></i> <span th:text="#{profile.deleteAccountForever}">Видалити мій акаунт назавжди</span>
+                </button>
+            </form>
+        </div>
+    </details>
+</div>
+
+<script th:src="@{/js/profile.js}"></script>
+</body>
+</html>

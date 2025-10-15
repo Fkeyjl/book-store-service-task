@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{app.name}">Book Store</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/categories.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{layouts/header.html::header}"></div>
+<div class="container">
+    <h3 class="title" th:text="#{index.newest}">Новинки</h3>
+</div>
+<section class="book-slider-section" role="region" th:aria-label="#{index.newest}">
+    <button class="slider-arrow prev-arrow"
+            data-direction="-1"
+            th:aria-label="#{index.previousBooks}"
+            type="button">
+        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+    </button>
+
+    <div class="slider-track-container">
+        <div id="book-slider-track"
+             class="slider-track"
+             role="list"
+             aria-live="polite">
+            <div th:each="book : ${books}"
+                 class="book-slide"
+                 role="listitem">
+                <div class="book-card-wrapper">
+                    <a th:href="@{/books/{id}(id=${book.id})}" class="book-card-link">
+                        <div class="book-card-content">
+                            <img th:src="@{/images/books/book.jpg}" th:alt="#{book.coverImage}" class="book-image">
+                            <div class="book-info">
+                                <p class="book-title" th:text="${book.name}">Назва книги</p>
+                                <p class="book-author" th:text="${book.author}">Автор</p>
+                                <p class="book-price" th:text="${book.price}">Ціна</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <form th:action="@{/cart/add}" method="post" class="buy-form">
+                        <input type="hidden" name="bookId" th:value="${book.id}"/>
+                        <input type="hidden" name="quantity" value="1"/>
+                        <button type="submit" class="buy-button">
+                            <i class="fas fa-cart-plus"></i> <span th:text="#{common.buy}">Купити</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="slider-arrow next-arrow"
+            data-direction="1"
+            th:aria-label="#{index.nextBooks}"
+            type="button">
+        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+    </button>
+</section>
+<div class="categories-section">
+    <div class="categories-container">
+        <a th:each="category : ${categories}" class="category-card-link">
+            <div class="category-card">
+                <div class="category-card-content">
+
+                    <div class="category-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+
+                    <p th:text="*{category.name}"></p>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="all-categories-wrapper">
+        <a href="/categories" class="all-categories-button" th:text="#{nav.categories}">Всі категорії книг</a>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/js/index.js}" defer></script>
+</body>
+</html>

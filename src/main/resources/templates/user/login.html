@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{nav.login} + ' - ' + #{app.name}">Вхід - Книжковий магазин</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
+</head>
+<body>
+<div class="login-container">
+    <header class="login-header">
+        <h2 th:text="#{auth.welcome}">Вітаємо!</h2>
+        <p th:text="#{auth.pleaseLogin}">Будь ласка, увійдіть до свого облікового запису</p>
+    </header>
+
+    <form class="login-form" th:action="@{/login}" th:object="${loginRequest}" method="post">
+
+        <div th:if="${loginError}" class="error-message" role="alert">
+            <p th:text="${loginError}">Помилка входу</p>
+        </div>
+
+        <div class="form-group">
+            <label for="username" th:text="#{auth.email}">Email</label>
+            <input
+                    type="email"
+                    id="username"
+                    name="username"
+                    th:field="*{username}"
+                    th:placeholder="#{auth.emailPlaceholder}"
+                    autocomplete="email"
+                    required
+                    aria-required="true">
+        </div>
+
+        <div class="form-group">
+            <label for="password" th:text="#{auth.password}">Пароль</label>
+            <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    th:field="*{password}"
+                    th:placeholder="#{auth.passwordPlaceholder}"
+                    autocomplete="current-password"
+                    required
+                    aria-required="true">
+        </div>
+
+        <button type="submit" class="submit-button" th:text="#{auth.loginButton}">Увійти</button>
+    </form>
+
+    <footer class="login-footer">
+        <p><span th:text="#{auth.noAccount}">Немає облікового запису?</span> <a th:href="@{/register}"
+                                                                                th:text="#{auth.registerButton}">Зареєструватися</a>
+        </p>
+    </footer>
+</div>
+</body>
+</html>

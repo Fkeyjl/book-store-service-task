@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{nav.categories} + ' - ' + #{app.name}">Catalog</title>
+    <link rel="stylesheet" type=text/css th:href="@{/css/header.css}">
+    <link rel="stylesheet" type=text/css th:href="@{/css/categories.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{layouts/header.html::header}"></div>
+<div class="categories-section">
+    <div class="categories-container">
+        <a th:each="category : ${categories}" class="category-card-link">
+            <div class="category-card">
+                <div class="category-card-content">
+
+                    <div class="category-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+
+                    <p th:text="*{category.name}"></p>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+</body>
+</html>

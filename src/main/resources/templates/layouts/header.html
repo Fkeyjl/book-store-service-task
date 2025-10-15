@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="uk"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<header th:fragment="header" class="main-header">
+    <!--    <div class="side-menu-overlay" id="sideMenuOverlay"></div>-->
+    <!--    -->
+    <!--    <nav class="side-menu" id="sideMenu" aria-label="Бокове меню">-->
+    <!--        <div class="side-menu-header">-->
+    <!--            <h2 class="side-menu-title">Меню</h2>-->
+    <!--            <button class="side-menu-close"-->
+    <!--                    id="sideMenuClose"-->
+    <!--                    type="button"-->
+    <!--                    aria-label="Закрити меню">-->
+    <!--                <i class="fas fa-times" aria-hidden="true"></i>-->
+    <!--            </button>-->
+    <!--        </div>-->
+
+    <!--        <div class="side-menu-nav">-->
+    <!--            <a sec:authorize="hasRole('CUSTOMER')"-->
+    <!--               th:href="@{/categories}"-->
+    <!--               class="side-menu-link">-->
+    <!--                <i class="fas fa-th-large" aria-hidden="true"></i>-->
+    <!--                <span>Всі категорії</span>-->
+    <!--            </a>-->
+
+    <!--            <a sec:authorize="hasRole('CUSTOMER')"-->
+    <!--               th:href="@{/profile}"-->
+    <!--               class="side-menu-link">-->
+    <!--                <i class="fas fa-user-circle" aria-hidden="true"></i>-->
+    <!--                <span>Мій профіль</span>-->
+    <!--            </a>-->
+
+    <!--            <a sec:authorize="hasRole('CUSTOMER')"-->
+    <!--               th:href="@{/cart}"-->
+    <!--               class="side-menu-link">-->
+    <!--                <i class="fas fa-shopping-cart" aria-hidden="true"></i>-->
+    <!--                <span>Кошик</span>-->
+    <!--            </a>-->
+    <!--            -->
+    <!--            <a sec:authorize="hasRole('EMPLOYEE')"-->
+    <!--               th:href="@{/manage-users}"-->
+    <!--               class="side-menu-link">-->
+    <!--                <i class="fas fa-users" aria-hidden="true"></i>-->
+    <!--                <span>Користувачі</span>-->
+    <!--            </a>-->
+
+    <!--            <a sec:authorize="hasRole('EMPLOYEE')"-->
+    <!--               th:href="@{/orders}"-->
+    <!--               class="side-menu-link">-->
+    <!--                <i class="fas fa-clipboard-list" aria-hidden="true"></i>-->
+    <!--                <span>Замовлення</span>-->
+    <!--            </a>-->
+    <!--        </div>-->
+    <!--    </nav>-->
+
+    <div class="header-container">
+        <div class="header-brand">
+            <button class="menu-toggle"
+                    type="button"
+                    aria-label="Відкрити меню"
+                    aria-expanded="false"
+                    data-menu-toggle>
+                <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+
+            <a th:href="@{/}" class="home-link" th:aria-label="#{nav.home}">
+                <i class="fas fa-home" aria-hidden="true"></i>
+                <span class="visually-hidden" th:text="#{nav.home}">Головна</span>
+            </a>
+        </div>
+
+        <nav class="catalog-nav" th:aria-label="#{nav.catalog}">
+            <a th:href="@{/books}" class="catalog-button">
+                <i class="fas fa-th-large" aria-hidden="true"></i>
+                <span class="button-text" th:text="#{nav.catalog}">Каталог</span>
+            </a>
+        </nav>
+
+        <div class="search-container" role="search">
+            <form th:action="@{/search}"
+                  method="get"
+                  class="search-form"
+                  data-search-form>
+                <label for="search-input" class="visually-hidden" th:text="#{common.search}">Пошук книг</label>
+                <input type="search"
+                       id="search-input"
+                       name="query"
+                       class="search-input"
+                       placeholder="Я шукаю..."
+                       aria-label="Пошук книг"
+                       autocomplete="off"
+                       maxlength="100">
+                <button type="submit"
+                        class="search-submit"
+                        aria-label="Знайти">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <span class="button-text">Знайти</span>
+                </button>
+            </form>
+        </div>
+
+        <div class="header-actions">
+            <div class="locale-switcher">
+                <a th:href="@{''(lang='uk')}"
+                   class="locale-link"
+                   th:classappend="${#locale.language == 'uk'} ? 'active' : ''"
+                   title="Українська">
+                    UK
+                </a>
+                <span class="locale-separator">|</span>
+                <a th:href="@{''(lang='en')}"
+                   class="locale-link"
+                   th:classappend="${#locale.language == 'en'} ? 'active' : ''"
+                   title="English">
+                    EN
+                </a>
+            </div>
+
+            <button class="action-link theme-toggle"
+                    id="themeToggle"
+                    type="button"
+                    aria-label="Перемикач теми">
+                <i class="fas fa-moon" id="themeIcon" aria-hidden="true"></i>
+            </button>
+
+            <a sec:authorize="hasRole('CUSTOMER')"
+               th:href="@{/cart}"
+               class="action-link cart-link"
+               aria-label="Кошик покупок">
+                <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+            </a>
+
+            <a sec:authorize="hasRole('EMPLOYEE')"
+               th:href="@{/management/users}"
+               class="action-link users-link"
+               aria-label="Управління користувачами">
+                <i class="fas fa-users" aria-hidden="true"></i>
+            </a>
+
+            <a sec:authorize="hasRole('EMPLOYEE')"
+               th:href="@{/orders}"
+               class="action-link orders-link"
+               aria-label="Замовлення користувачів">
+                <i class="fas fa-clipboard-list" aria-hidden="true"></i>
+            </a>
+
+            <div class="auth-container">
+                <a sec:authorize="!isAuthenticated()"
+                   th:href="@{/login}"
+                   class="action-link auth-link"
+                   aria-label="Увійти">
+                    <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                    <span class="visually-hidden">Увійти</span>
+                </a>
+
+                <div sec:authorize="isAuthenticated()" class="auth-menu">
+                    <a th:href="@{/profile}"
+                       class="action-link profile-link"
+                       aria-label="Профіль користувача">
+                        <i class="fas fa-user-circle" aria-hidden="true"></i>
+                        <span class="visually-hidden">Профіль</span>
+                    </a>
+
+                    <form th:action="@{/logout}"
+                          method="post"
+                          style="display: inline; margin: 0;">
+                        <button type="submit"
+                                class="action-link logout-button"
+                                aria-label="Вийти">
+                            <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                            <span class="visually-hidden">Вийти</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<link rel="stylesheet" th:href="@{/css/theme.css}">
+
+<script th:src="@{/js/header.js}"></script>
+
+</body>
+</html>

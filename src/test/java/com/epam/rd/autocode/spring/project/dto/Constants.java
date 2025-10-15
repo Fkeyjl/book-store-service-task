@@ -56,8 +56,8 @@ public class Constants {
 
     static class OrderDTO {
         public static final String CLASS_NAME = "OrderDTO";
-        public static final int CLASS_COUNT_FIELDS = 5;
+        public static final int CLASS_COUNT_FIELDS = 4;
         public static final int CLASS_COUNT_CONSTRUCTORS = 2;
-        public static final int PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS = 5;
+        public static final int PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS = 4;
     }
 }
