@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управління робітниками - Адмін панель</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/manage-users.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{layouts/header.html::header}"></div>
+
+<div class="container">
+    <h2><i class="fas fa-users-cog"></i> Управління робітниками</h2>
+
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <i class="fas fa-check-circle"></i> <span th:text="${successMessage}">Успішно</span>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <i class="fas fa-exclamation-circle"></i> <span th:text="${errorMessage}">Помилка</span>
+    </div>
+
+    <div th:if="${employees.isEmpty()}" class="empty-message">
+        <i class="fas fa-user-slash" style="font-size: 3rem; color: #bbb;"></i>
+        <p>Немає зареєстрованих робітників</p>
+    </div>
+
+    <table th:unless="${employees.isEmpty()}" class="users-table">
+        <thead>
+        <tr>
+            <th><i class="fas fa-hashtag"></i> ID</th>
+            <th><i class="fas fa-user"></i> Ім'я</th>
+            <th><i class="fas fa-envelope"></i> Email</th>
+            <th><i class="fas fa-phone"></i> Телефон</th>
+            <th><i class="fas fa-calendar-alt"></i> Дата народження</th>
+            <th><i class="fas fa-wallet"></i> Баланс</th>
+            <th><i class="fas fa-info-circle"></i> Статус</th>
+            <th><i class="fas fa-cog"></i> Дії</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${employees}">
+            <td th:text="${employee.id}">1</td>
+            <td th:text="${employee.name}">Іван Іваненко</td>
+            <td th:text="${employee.email}">employee@example.com</td>
+            <td th:text="${employee.phone} ?: 'Не вказано'">+380123456789</td>
+            <td th:text="${employee.birthDate != null ? #temporals.format(employee.birthDate, 'dd.MM.yyyy') : 'Не вказано'}">01.01.1990</td>
+            <td>
+                <strong th:text="${employee.balance}">0.00</strong> грн
+            </td>
+            <td>
+                <span th:if="${employee.isBlocked}" class="badge badge-blocked">
+                    <i class="fas fa-ban"></i> Заблокований
+                </span>
+                <span th:unless="${employee.isBlocked}" class="badge badge-active">
+                    <i class="fas fa-check-circle"></i> Активний
+                </span>
+            </td>
+            <td class="actions">
+                <a th:href="@{/admin/employees/{id}/edit(id=${employee.id})}" class="btn btn-edit" title="Редагувати">
+                    <i class="fas fa-edit"></i>
+                </a>
+
+                <form th:if="${employee.isBlocked}" th:action="@{/admin/employees/{id}/unblock(id=${employee.id})}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-unblock" title="Розблокувати">
+                        <i class="fas fa-lock-open"></i>
+                    </button>
+                </form>
+
+                <form th:unless="${employee.isBlocked}" th:action="@{/admin/employees/{id}/block(id=${employee.id})}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-block" title="Заблокувати">
+                        <i class="fas fa-ban"></i>
+                    </button>
+                </form>
+
+                <form th:action="@{/admin/employees/{id}/delete(id=${employee.id})}" method="post" 
+                      style="display: inline;" 
+                      onsubmit="return confirm('Ви впевнені, що хочете видалити цього робітника?');">
+                    <button type="submit" class="btn btn-delete" title="Видалити">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

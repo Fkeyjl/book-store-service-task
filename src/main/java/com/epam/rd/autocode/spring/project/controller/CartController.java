@@ -2,6 +2,7 @@ package com.epam.rd.autocode.spring.project.controller;
 
 import com.epam.rd.autocode.spring.project.dto.BookItemDTO;
 import com.epam.rd.autocode.spring.project.dto.Cart;
+import com.epam.rd.autocode.spring.project.exception.InsufficientFundsException;
 import com.epam.rd.autocode.spring.project.service.CartService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +23,9 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping
-    public String viewCart(@CookieValue(name = "shoppingCart", required = false) String cartJson, Model model) {
+    @PreAuthorize("isAnonymous() or hasRole('CUSTOMER')")
+    public String viewCart(@CookieValue(name = "shoppingCart", required = false) String cartJson,
+                          Model model) {
         Cart cart = cartService.getCartFromCookies(cartJson);
         List<BookItemDTO> cartDetails = cartService.getDetailedCartItems(cart);
 
@@ -33,6 +36,7 @@ public class CartController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("isAnonymous() or hasRole('CUSTOMER')")
     public String addToCart(@RequestParam Long bookId,
                             @RequestParam(defaultValue = "1") int quantity,
                             @CookieValue(name = "shoppingCart", required = false) String cartJson,
@@ -46,6 +50,7 @@ public class CartController {
     }
 
     @PostMapping("/remove/{bookId}")
+    @PreAuthorize("isAnonymous() or hasRole('CUSTOMER')")
     public String removeFromCart(@PathVariable Long bookId,
                                  @CookieValue(name = "shoppingCart", required = false) String cartJson,
                                  HttpServletResponse response) {
@@ -57,16 +62,26 @@ public class CartController {
         return "redirect:/cart";
     }
 
+    @PostMapping("/update/{bookId}")
+    @PreAuthorize("isAnonymous() or hasRole('CUSTOMER')")
+    public String updateQuantity(@PathVariable Long bookId,
+                                 @RequestParam int quantity,
+                                 @CookieValue(name = "shoppingCart", required = false) String cartJson,
+                                 HttpServletResponse response) {
+
+        Cart cart = cartService.getCartFromCookies(cartJson);
+        Cart updatedCart = cartService.updateBookQuantity(cart, bookId, quantity);
+        setCartCookie(response, updatedCart);
+
+        return "redirect:/cart";
+    }
+
     @PostMapping("/checkout")
     @PreAuthorize("hasRole('CUSTOMER')")
     public String checkout(@CookieValue(name = "shoppingCart", required = false) String cartJson,
                            @AuthenticationPrincipal Jwt jwt,
                            HttpServletResponse response,
                            Model model) {
-
-        if (jwt == null) {
-            return "redirect:/login?redirect=/cart";
-        }
 
         Cart cart = cartService.getCartFromCookies(cartJson);
 
@@ -82,8 +97,10 @@ public class CartController {
 
             return "redirect:/books";
 
-        } catch (Exception e) {
+        } catch (InsufficientFundsException e) {
             model.addAttribute("errorMessage", "Помилка оформлення замовлення: " + e.getMessage());
+            model.addAttribute("cart", cart);
+            model.addAttribute("cartDetails", cartService.getDetailedCartItems(cart));
             return "user/view-cart";
         }
     }

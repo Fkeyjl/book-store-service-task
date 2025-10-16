@@ -12,6 +12,8 @@ public interface OrderService {
 
     List<OrderDTO> getOrdersByClientId(Long id);
 
+    OrderDTO getOrderById(Long orderId);
+
     void updateOrderStatus(Long orderId, Status newStatus);
 
     List<OrderDTO> getOrdersByEmployee(String employeeEmail);

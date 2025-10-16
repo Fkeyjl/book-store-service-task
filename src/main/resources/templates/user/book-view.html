@@ -24,7 +24,7 @@
                 <i class="fas fa-book"></i>
             </div>
 
-            <div sec:authorize="hasRole('CUSTOMER')" class="cart-actions">
+            <div sec:authorize="!hasAnyRole('ADMIN', 'EMPLOYEE')" class="cart-actions">
                 <form th:action="@{/cart/add}" method="post" class="add-to-cart-form">
                     <input type="hidden" name="bookId" th:value="${book.id}"/>
                     <button type="submit" class="add-to-cart-button">
@@ -33,7 +33,7 @@
                 </form>
             </div>
 
-            <div sec:authorize="hasRole('EMPLOYEE')" class="admin-actions">
+            <div sec:authorize="hasAnyRole('EMPLOYEE', 'ADMIN')" class="admin-actions">
                 <a th:href="@{/books/{id}/edit(id=${book.id})}" class="edit-button">
                     <i class="fas fa-edit"></i> <span th:text="#{common.edit}">Редагувати</span>
                 </a>

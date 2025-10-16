@@ -14,6 +14,10 @@
 <div class="form-container">
     <h2><i class="fas fa-plus-circle"></i> <span th:text="#{book.create}">Створення нової книги</span></h2>
 
+    <div th:if="${creatingError}" class="error-message" role="alert">
+        <p th:text="${creatingError}"></p>
+    </div>
+
     <form class="book-form" th:action="@{/books/create}" th:object="${bookDTO}" method="post">
 
         <div class="form-group">

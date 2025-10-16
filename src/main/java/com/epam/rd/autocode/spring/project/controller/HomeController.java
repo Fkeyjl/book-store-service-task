@@ -1,7 +1,7 @@
 package com.epam.rd.autocode.spring.project.controller;
 
 import com.epam.rd.autocode.spring.project.dto.BookSummaryDTO;
-import com.epam.rd.autocode.spring.project.model.Category;
+import com.epam.rd.autocode.spring.project.dto.CategoryDTO;
 import com.epam.rd.autocode.spring.project.service.BookService;
 import com.epam.rd.autocode.spring.project.service.CategoryService;
 import org.springframework.data.domain.Page;
@@ -26,7 +26,7 @@ public class HomeController {
     public String home(Model model,
                        @RequestParam(defaultValue = "0") int page,
                        @RequestParam(defaultValue = "10") int size) {
-        Page<Category> categories = categoryService.getCategoriesPage(page, 4);
+        Page<CategoryDTO> categories = categoryService.getCategoriesPage(page, 4);
         Page<BookSummaryDTO> bookPage = bookService.getNewestBooksPaged(page, size);
         model.addAttribute("books", bookPage);
         model.addAttribute("currentPage", bookPage.getNumber());

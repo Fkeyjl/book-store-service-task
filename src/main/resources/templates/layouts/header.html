@@ -94,9 +94,9 @@
                        maxlength="100">
                 <button type="submit"
                         class="search-submit"
-                        aria-label="Знайти">
+                        th:attr="aria-label=#{common.find}">
                     <i class="fas fa-search" aria-hidden="true"></i>
-                    <span class="button-text">Знайти</span>
+                    <span class="button-text" th:text="#{common.find}">Знайти</span>
                 </button>
             </form>
         </div>
@@ -125,42 +125,56 @@
                 <i class="fas fa-moon" id="themeIcon" aria-hidden="true"></i>
             </button>
 
-            <a sec:authorize="hasRole('CUSTOMER')"
+            <a sec:authorize="!hasAnyRole('ADMIN', 'EMPLOYEE')"
                th:href="@{/cart}"
                class="action-link cart-link"
                aria-label="Кошик покупок">
                 <i class="fas fa-shopping-cart" aria-hidden="true"></i>
             </a>
 
-            <a sec:authorize="hasRole('EMPLOYEE')"
+            <a sec:authorize="hasAnyRole('EMPLOYEE', 'ADMIN')"
                th:href="@{/management/users}"
                class="action-link users-link"
                aria-label="Управління користувачами">
                 <i class="fas fa-users" aria-hidden="true"></i>
             </a>
 
-            <a sec:authorize="hasRole('EMPLOYEE')"
+            <a sec:authorize="hasRole('ADMIN')"
+               th:href="@{/admin/employees}"
+               class="action-link employees-link"
+               aria-label="Управління робітниками">
+                <i class="fas fa-users-cog" aria-hidden="true"></i>
+            </a>
+
+            <a sec:authorize="hasAnyRole('EMPLOYEE', 'ADMIN')"
                th:href="@{/orders}"
                class="action-link orders-link"
                aria-label="Замовлення користувачів">
                 <i class="fas fa-clipboard-list" aria-hidden="true"></i>
             </a>
 
+            <a sec:authorize="hasAnyRole('EMPLOYEE', 'ADMIN')"
+               th:href="@{/books/create}"
+               class="action-link create-book-link"
+               aria-label="Створити нову книгу">
+                <i class="fas fa-plus-circle" aria-hidden="true"></i>
+            </a>
+
             <div class="auth-container">
                 <a sec:authorize="!isAuthenticated()"
                    th:href="@{/login}"
                    class="action-link auth-link"
-                   aria-label="Увійти">
+                   th:attr="aria-label=#{common.signIn}">
                     <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
-                    <span class="visually-hidden">Увійти</span>
+                    <span class="visually-hidden" th:text="#{common.signIn}">Увійти</span>
                 </a>
 
                 <div sec:authorize="isAuthenticated()" class="auth-menu">
                     <a th:href="@{/profile}"
                        class="action-link profile-link"
-                       aria-label="Профіль користувача">
+                       th:attr="aria-label=#{common.profile}">
                         <i class="fas fa-user-circle" aria-hidden="true"></i>
-                        <span class="visually-hidden">Профіль</span>
+                        <span class="visually-hidden" th:text="#{common.profile}">Профіль</span>
                     </a>
 
                     <form th:action="@{/logout}"
@@ -168,9 +182,9 @@
                           style="display: inline; margin: 0;">
                         <button type="submit"
                                 class="action-link logout-button"
-                                aria-label="Вийти">
+                                th:attr="aria-label=#{common.signOut}">
                             <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-                            <span class="visually-hidden">Вийти</span>
+                            <span class="visually-hidden" th:text="#{common.signOut}">Вийти</span>
                         </button>
                     </form>
                 </div>

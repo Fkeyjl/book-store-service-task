@@ -1,6 +1,6 @@
 package com.epam.rd.autocode.spring.project.controller;
 
-import com.epam.rd.autocode.spring.project.model.Category;
+import com.epam.rd.autocode.spring.project.dto.CategoryDTO;
 import com.epam.rd.autocode.spring.project.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +18,7 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public String getCategories(Model model) {
-        List<Category> categories = categoryService.getCategories();
+        List<CategoryDTO> categories = categoryService.getCategories();
         model.addAttribute("categories", categories);
         return "user/categories";
     }

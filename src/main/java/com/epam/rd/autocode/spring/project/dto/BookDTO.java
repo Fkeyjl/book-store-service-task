@@ -1,6 +1,5 @@
 package com.epam.rd.autocode.spring.project.dto;
 
-import com.epam.rd.autocode.spring.project.model.Category;
 import com.epam.rd.autocode.spring.project.model.enums.AgeGroup;
 import com.epam.rd.autocode.spring.project.model.enums.Language;
 import com.epam.rd.autocode.spring.project.validation.OnCreate;
@@ -24,7 +23,7 @@ public class BookDTO{
     private String name;
 
     @NotEmpty(message = "At least one category is required", groups = OnCreate.class)
-    private Set<Category> categories;
+    private Set<CategoryDTO> categories;
     
     @NotBlank(message = "ISBN is required", groups = OnCreate.class)
     @Pattern(regexp = "^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$", 

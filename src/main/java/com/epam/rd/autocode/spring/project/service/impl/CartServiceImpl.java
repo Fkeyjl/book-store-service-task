@@ -89,6 +89,23 @@ public class CartServiceImpl implements CartService {
         return cart;
     }
 
+    public Cart updateBookQuantity(Cart cart, Long bookId, int quantity) {
+        if (quantity <= 0) {
+            throw new CartValidationException("Кількість має бути більше нуля");
+        }
+        if (quantity > MAX_QUANTITY_PER_ITEM) {
+            throw new CartValidationException("Кількість перевищує максимально дозволену (" + MAX_QUANTITY_PER_ITEM + ")");
+        }
+
+        if (!cart.getItems().containsKey(bookId)) {
+            throw new CartValidationException("Товар не знайдено в кошику");
+        }
+
+        cart.getItems().put(bookId, quantity);
+        recalculateCart(cart);
+        return cart;
+    }
+
     public Cart removeItemFromCart(Cart cart, Long bookId) {
         cart.getItems().remove(bookId);
         recalculateCart(cart);

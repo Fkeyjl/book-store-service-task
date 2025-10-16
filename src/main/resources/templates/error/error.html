@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${error} ?: 'Error'">Error</title>
+    <link rel="stylesheet" th:href="@{/css/theme.css}">
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div class="error-container">
+    <div class="error-content">
+        <div class="error-icon" 
+             th:classappend="${status == 404} ? 'error-404' : (${status == 403} ? 'error-403' : (${status == 500} ? 'error-500' : ''))">
+            <i th:class="${status == 404} ? 'fas fa-search' : 
+                         (${status == 403} ? 'fas fa-ban' : 
+                         (${status == 500} ? 'fas fa-server' : 'fas fa-exclamation-circle'))"></i>
+        </div>
+        <h1 class="error-code" th:text="${status} ?: '500'">500</h1>
+        <h2 class="error-title" th:text="${error} ?: 'Error'">Error</h2>
+        <p class="error-message" th:text="${message} ?: 'An unexpected error occurred. Please try again later.'">
+            An unexpected error occurred. Please try again later.
+        </p>
+        <div class="error-actions">
+            <a th:href="@{/}" class="btn btn-primary">
+                <i class="fas fa-home"></i> <span th:text="#{error.goHome}">Go to Home</span>
+            </a>
+            <a href="javascript:history.back()" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> <span th:text="#{error.goBack}">Go Back</span>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

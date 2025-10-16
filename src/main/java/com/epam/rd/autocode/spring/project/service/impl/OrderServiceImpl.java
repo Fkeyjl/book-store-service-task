@@ -32,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderDTO> getAllOrders() {
         return orderRepository.findAll().stream()
                 .map(order -> modelMapper.map(order, OrderDTO.class))
@@ -45,14 +46,29 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    @Override
+    public OrderDTO getOrderById(Long orderId) {
+        Order order = orderRepository.findByIdWithAllDetails(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Order not found with ID: " + orderId));
+        return modelMapper.map(order, OrderDTO.class);
+    }
+
     @Transactional
     public void updateOrderStatus(Long orderId, Status newStatus) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found with ID: " + orderId));
 
+        Status oldStatus = order.getStatus();
+
         if (order.getStatus() == Status.DELIVERED && newStatus == Status.PENDING) {
             throw new IllegalStateException("Unable to change status from DELIVERED to PENDING");
         }
+
+        // Повернення коштів при зміні статусу на CANCELLED
+        if (newStatus == Status.CANCELLED && oldStatus != Status.CANCELLED) {
+            userService.addUserBalance(order.getUser().getId(), order.getPrice());
+        }
+
         order.setStatus(newStatus);
         orderRepository.save(order);
     }

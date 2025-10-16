@@ -12,6 +12,7 @@ public interface CartService {
     Cart deserializeCart(String cartJson);
     Cart getCartFromCookies(String cartJson);
     Cart addBookToCart(Cart cart, Long bookId, int quantity);
+    Cart updateBookQuantity(Cart cart, Long bookId, int quantity);
     Cart removeItemFromCart(Cart cart, Long bookId);
     void recalculateCart(Cart cart);
     void checkout(Cart cart, Long userId);

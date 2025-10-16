@@ -87,7 +87,7 @@ public class OrderDTOTest {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("No parameter with type " + Constants.LOCAL_DATE_TIME_TYPE));
 
-        assertEquals(4, parameters.size());
+        assertEquals(Constants.OrderDTO.PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS, parameters.size());
     }
 
     @Test

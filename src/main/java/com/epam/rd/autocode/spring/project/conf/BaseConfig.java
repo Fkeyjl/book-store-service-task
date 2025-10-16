@@ -23,6 +23,9 @@ public class BaseConfig {
                     if (destination.getBalance() == null) {
                         destination.setBalance(new BigDecimal("0.00"));
                     }
+                    if (destination.getIsBlocked() == null) {
+                        destination.setIsBlocked(false);
+                    }
                     return destination;
                 });
         return modelMapper;

@@ -102,7 +102,7 @@ public class BookDTOTest {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("No parameter with type " + Constants.LANGUAGE_TYPE));
 
-        assertEquals(10, parameters.size());
+        assertEquals(Constants.BookDTO.PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS, parameters.size());
     }
 
     @Test
@@ -124,8 +124,10 @@ public class BookDTOTest {
     @DisplayName("Check field type and field name")
     @ParameterizedTest
     @CsvSource({
+            "java.lang.Long, id, 1",
             "java.lang.String, name, 1",
-            "java.lang.String, genre, 1",
+            "java.util.Set, categories, 1",
+            "java.lang.String, isbn, 1",
             "com.epam.rd.autocode.spring.project.model.enums.AgeGroup, ageGroup, 1",
             "java.math.BigDecimal, price, 1",
             "java.time.LocalDate, publicationDate, 1",

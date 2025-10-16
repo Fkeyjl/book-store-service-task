@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,6 +30,18 @@ public class OrderController {
         return "management/orders";
     }
 
+    @GetMapping("/order/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'EMPLOYEE', 'ADMIN')")
+    public String getOrderDetails(@PathVariable Long id, Model model) {
+        try {
+            model.addAttribute("order", orderService.getOrderById(id));
+            return "management/order-details";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("errorMessage", "Замовлення не знайдено");
+            return "redirect:/orders";
+        }
+    }
+
     @PostMapping("/orders/update-status")
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
     public String updateStatus(@ModelAttribute OrderStatusUpdateDto dto,
@@ -42,7 +55,6 @@ public class OrderController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Помилка оновлення статусу.");
         }
-
         return "redirect:/orders";
     }
 }

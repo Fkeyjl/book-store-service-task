@@ -38,7 +38,9 @@ VALUES ('john.doe@email.com', 'John Doe', '$2a$10$09irW97UjUr543TGCV04zO51aOLdkP
        ('client9@example.com', 'Amina Clarke', '$2a$10$OmDWq323KFC4scydm/yesuYvQrhuMBMW3JK.icO.5KaSrcoHNGlqO', NULL,
         NULL, 1050.90, 'CUSTOMER', FALSE),
        ('client10@example.com', 'Bryson Chavez', '$2a$10$OJq20MQZFcFucm0/ddai6.bUHM7SPtSb9TXT9dUcSu2Zi4kPLRACu', NULL,
-        NULL, 880.20, 'CUSTOMER', FALSE);
+        NULL, 880.20, 'CUSTOMER', FALSE),
+       ('admin@example.com', 'Admin User', '$2a$10$IoNhaO8xLH9JKjo1C7GsWuP4Cdj5oqXUDlrybvLmaTnd3H3o7G2uC',
+        NULL, NULL, 0.00, 'ADMIN', FALSE);
 
 INSERT INTO categories (name)
 VALUES ('Adventure'),

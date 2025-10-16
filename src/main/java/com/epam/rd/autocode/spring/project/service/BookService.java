@@ -5,6 +5,7 @@ import com.epam.rd.autocode.spring.project.dto.BookSummaryDTO;
 import com.epam.rd.autocode.spring.project.model.enums.AgeGroup;
 import com.epam.rd.autocode.spring.project.model.enums.Language;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
@@ -12,8 +13,9 @@ import java.util.List;
 
 public interface BookService {
     List<BookDTO> getAllBooks();
-    
+
     List<BookDTO> getFilteredAndSortedBooks(
+            Long categoryId,
             Language language,
             AgeGroup ageGroup,
             BigDecimal minPrice,
@@ -22,12 +24,18 @@ public interface BookService {
             Sort sort
     );
 
+    Page<BookDTO> getFilteredAndSortedPage(Long categoryId, Language language, AgeGroup ageGroup,
+                                        BigDecimal minPrice,
+                                        BigDecimal maxPrice,
+                                        String searchTerm,
+                                        Pageable pageable);
+
     Page<BookSummaryDTO> getNewestBooksPaged(int page, int size);
 
     BookDTO getBookByName(String name);
 
     BookDTO getBookById(Long id);
-    
+
     List<BookDTO> getBooksByIds(List<Long> ids);
 
     void updateBookByName(String name, BookDTO book);

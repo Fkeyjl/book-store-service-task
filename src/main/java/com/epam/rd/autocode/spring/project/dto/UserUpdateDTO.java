@@ -12,12 +12,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class UserUpdateDTO {
     private Long id;
-    
-    @NotBlank(message = "Name is required")
+
     @Size(min = 1, max = 100, message = "Name must be between 1 and 100 characters")
     private String name;
-    
-    @NotBlank(message = "Email is required")
+
     @Email(message = "Email must be valid")
     private String email;
     

@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
+import java.time.Duration;
 import java.util.Locale;
 
 @Configuration
@@ -19,10 +20,8 @@ public class LocaleConfig implements WebMvcConfigurer {
     public LocaleResolver localeResolver() {
         CookieLocaleResolver localeResolver = new CookieLocaleResolver("lang");
         localeResolver.setDefaultLocale(new Locale("uk"));
-
-//        localeResolver.setCookieSecure(true);
-//        localeResolver.setCookieHttpOnly(true);
-//        localeResolver.setCookieSameSite("Lax");
+        localeResolver.setCookieHttpOnly(true);
+        localeResolver.setCookieMaxAge(Duration.ofHours(1));
         return localeResolver;
     }
 

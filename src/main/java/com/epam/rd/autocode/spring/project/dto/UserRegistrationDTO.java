@@ -15,6 +15,7 @@ public class UserRegistrationDTO {
     @Email
     private String email;
 
+    @NotBlank
     @Size(min = 6)
     private String password;
 

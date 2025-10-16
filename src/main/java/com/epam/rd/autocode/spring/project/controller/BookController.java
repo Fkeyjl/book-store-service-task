@@ -6,6 +6,10 @@ import com.epam.rd.autocode.spring.project.model.enums.Language;
 import com.epam.rd.autocode.spring.project.service.BookService;
 import com.epam.rd.autocode.spring.project.service.CategoryService;
 import com.epam.rd.autocode.spring.project.validation.OnCreate;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -14,7 +18,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/books")
@@ -29,63 +32,41 @@ public class BookController {
 
     @GetMapping
     public String showBooks(
-            @RequestParam(required = false) String language,
-            @RequestParam(required = false) String ageGroup,
-            @RequestParam(required = false) String minPrice,
-            @RequestParam(required = false) String maxPrice,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Language language,
+            @RequestParam(required = false) AgeGroup ageGroup,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String sort,
+            Pageable pageable,
             Model model) {
 
-        Language languageEnum = parseLanguage(language);
-        AgeGroup ageGroupEnum = parseAgeGroup(ageGroup);
-        BigDecimal minPriceBD = parseBigDecimal(minPrice);
-        BigDecimal maxPriceBD = parseBigDecimal(maxPrice);
-        Sort sortObj = parseSort(sort);
-        
-        List<BookDTO> books = bookService.getFilteredAndSortedBooks(
-                languageEnum, ageGroupEnum, minPriceBD, maxPriceBD, search, sortObj);
-        
-        model.addAttribute("books", books);
+        Pageable pageableWithSort = createPageableWithSort(pageable, sort);
+
+        Page<BookDTO> booksPage = bookService.getFilteredAndSortedPage(
+                categoryId, language, ageGroup, minPrice, maxPrice, search, pageableWithSort);
+
+        model.addAttribute("books", booksPage);
+        model.addAttribute("categories", categoryService.getCategories());
         return "user/books";
     }
-    
-    private Language parseLanguage(String language) {
-        try {
-            return language != null && !language.isEmpty() ? Language.valueOf(language) : null;
-        } catch (IllegalArgumentException e) {
-            return null;
+
+    private Pageable createPageableWithSort(Pageable pageable, String sortParam) {
+        if (sortParam == null || sortParam.isEmpty()) {
+            return pageable;
         }
-    }
-    
-    private AgeGroup parseAgeGroup(String ageGroup) {
-        try {
-            return ageGroup != null && !ageGroup.isEmpty() ? AgeGroup.valueOf(ageGroup) : null;
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-    }
-    
-    private BigDecimal parseBigDecimal(String value) {
-        try {
-            return value != null && !value.isEmpty() ? new BigDecimal(value) : null;
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-    
-    private Sort parseSort(String sort) {
-        if (sort == null || sort.isEmpty()) {
-            return null;
-        }
-        return switch (sort) {
+
+        Sort sort = switch (sortParam) {
             case "name" -> Sort.by("name").ascending();
             case "author" -> Sort.by("author").ascending();
             case "price_asc" -> Sort.by("price").ascending();
             case "price_desc" -> Sort.by("price").descending();
             case "date_desc" -> Sort.by("publicationDate").descending();
-            default -> null;
+            default -> Sort.unsorted();
         };
+
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
     }
 
     @GetMapping("/{id}")
@@ -110,7 +91,7 @@ public class BookController {
     @PostMapping("/{id}/edit")
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
     public String editBook(@PathVariable("id") Long id,
-                           @ModelAttribute("book") BookDTO bookDTO) {
+                           @Valid @ModelAttribute("book") BookDTO bookDTO) {
         bookService.updateBook(id, bookDTO);
         return "redirect:/books/" + id;
     }
@@ -125,6 +106,9 @@ public class BookController {
     @GetMapping("/create")
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
     public String showCreateBookForm(Model model) {
+        if (!model.containsAttribute("creatingError")) {
+            model.addAttribute("creatingError", null);
+        }
         model.addAttribute("bookDTO", new BookDTO());
         model.addAttribute("allAgeGroups", AgeGroup.values());
         model.addAttribute("allLanguages", Language.values());

@@ -3,9 +3,11 @@ package com.epam.rd.autocode.spring.project.conf;
 import com.epam.rd.autocode.spring.project.utils.CookieBearerTokenResolver;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -27,12 +29,9 @@ import javax.crypto.SecretKey;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig{
     private final CookieBearerTokenResolver cookieBearerTokenResolver;
-
-    public SecurityConfig(CookieBearerTokenResolver cookieBearerTokenResolver) {
-        this.cookieBearerTokenResolver = cookieBearerTokenResolver;
-    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -70,19 +69,38 @@ public class SecurityConfig{
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
                         .bearerTokenResolver(cookieBearerTokenResolver)
+                        .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            if (request.getUserPrincipal() == null) {
+                                response.sendRedirect("/login");
+                            } else {
+                                response.sendRedirect("/error");
+                            }
+                        })
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/img/**", "/favicon.ico")
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/img/**", "/favicon.ico", "/error")
                         .permitAll()
-                        .requestMatchers(
-                                "/h2-console/**", "/register", "/login", "/categories", "/books/**", "/"
-                        ).permitAll()
+                        .requestMatchers("/h2-console/**", "/register", "/login", "/", "/api/auth/refresh")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/categories", "/books", "/books/**")
+                        .permitAll()
+                        .requestMatchers("/cart/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/profile/orders/**").authenticated()
+                        .requestMatchers("/profile/**").authenticated()
                         .requestMatchers("/orders/**").hasAnyRole("EMPLOYEE", "ADMIN")
-                        .requestMatchers("/cart/**").hasRole("CUSTOMER")
                         .anyRequest().authenticated()
                 )
+//                .exceptionHandling(exception -> exception
+//                        .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))
+//                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+//                            if (request.getUserPrincipal() == null) {
+//                                response.sendRedirect("/login");
+//                            } else {
+//                                response.sendRedirect("/error");
+//                            }
+//                        })
+//                )
                 //Delete after testing
                 .headers(headers -> headers
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
@@ -94,7 +112,7 @@ public class SecurityConfig{
                         .logoutSuccessUrl("/login?logout")
                         .invalidateHttpSession(false)
                         .clearAuthentication(true)
-                        .deleteCookies("JWT_TOKEN", "JSESSIONID")
+                        .deleteCookies("JWT_TOKEN", "REFRESH_TOKEN", "JSESSIONID")
                         .permitAll()
                 );
         return http.build();

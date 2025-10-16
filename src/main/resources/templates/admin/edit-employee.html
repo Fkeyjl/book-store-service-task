@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редагувати робітника - Адмін панель</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+<div th:replace="~{layouts/header.html::header}"></div>
+
+<div class="container">
+    <h2><i class="fas fa-user-edit"></i> Редагувати дані робітника</h2>
+
+    <div class="profile-card">
+        <form th:action="@{/admin/employees/{id}/edit(id=${employee.id})}" method="post" th:object="${employee}">
+            <div class="form-group">
+                <label for="name"><i class="fas fa-user"></i> Ім'я:</label>
+                <input type="text" id="name" name="name" th:value="${employee.name}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+                <input type="email" id="email" name="email" th:value="${employee.email}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone"><i class="fas fa-phone"></i> Телефон:</label>
+                <input type="tel" id="phone" name="phone" th:value="${employee.phone}" placeholder="+380XXXXXXXXX">
+            </div>
+
+            <div class="form-group">
+                <label for="birthDate"><i class="fas fa-calendar-alt"></i> Дата народження:</label>
+                <input type="date" id="birthDate" name="birthDate" th:value="${employee.birthDate}">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Зберегти зміни
+                </button>
+                <a th:href="@{/admin/employees}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Скасувати
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div class="info-section">
+        <h3><i class="fas fa-info-circle"></i> Додаткова інформація</h3>
+        <p><strong>ID робітника:</strong> <span th:text="${employee.id}">1</span></p>
+        <p><strong>Роль:</strong> <span th:text="${employee.role}">EMPLOYEE</span></p>
+        <p><strong>Баланс:</strong> <span th:text="${employee.balance}">0.00</span> грн</p>
+        <p><strong>Статус:</strong> 
+            <span th:if="${employee.isBlocked}" style="color: #e74c3c;">
+                <i class="fas fa-ban"></i> Заблокований
+            </span>
+            <span th:unless="${employee.isBlocked}" style="color: #27ae60;">
+                <i class="fas fa-check-circle"></i> Активний
+            </span>
+        </p>
+    </div>
+</div>
+</body>
+</html>

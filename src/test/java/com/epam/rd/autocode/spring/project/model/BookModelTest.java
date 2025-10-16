@@ -99,7 +99,7 @@ public class BookModelTest {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("No parameter with type " + Constants.LANGUAGE_TYPE));
 
-        assertEquals(12, parameters.size());
+        assertEquals(Constants.Book.PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS, parameters.size());
     }
 
     @Test
@@ -123,7 +123,9 @@ public class BookModelTest {
     @CsvSource({
             "java.lang.Long, id, 1",
             "java.lang.String, name, 1",
-            "java.lang.String, genre, 1",
+            "java.util.Set, categories, 1",
+            "java.util.List, bookItems, 1",
+            "java.lang.String, isbn, 1",
             "com.epam.rd.autocode.spring.project.model.enums.AgeGroup, ageGroup, 1",
             "java.math.BigDecimal, price, 1",
             "java.time.LocalDate, publicationDate, 1",

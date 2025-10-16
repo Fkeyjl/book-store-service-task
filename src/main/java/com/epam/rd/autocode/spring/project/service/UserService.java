@@ -2,6 +2,7 @@ package com.epam.rd.autocode.spring.project.service;
 
 import com.epam.rd.autocode.spring.project.dto.UserRegistrationDTO;
 import com.epam.rd.autocode.spring.project.dto.CustomerDTO;
+import com.epam.rd.autocode.spring.project.dto.EmployeeDTO;
 import com.epam.rd.autocode.spring.project.dto.UserUpdateDTO;
 import com.epam.rd.autocode.spring.project.model.User;
 
@@ -13,8 +14,11 @@ public interface UserService {
     CustomerDTO findUserById(Long id);
     User findUserByEmail(String email);
     List<CustomerDTO> findAllCustomers();
+    List<EmployeeDTO> findAllEmployees();
+    EmployeeDTO findEmployeeById(Long id);
     void updateUserProfile(UserUpdateDTO dto);
     User updateUserBalance(Long userId, BigDecimal amount);
+    User addUserBalance(Long userId, BigDecimal amount);
     void deleteUser(Long userId);
     void blockUser(Long userId);
     void unblockUser(Long userId);

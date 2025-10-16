@@ -33,37 +33,55 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDTO> getAllBooks() {
-        return bookRepository.findAll().stream()
+        return bookRepository.findAllWithCategories().stream()
                 .map(book -> modelMapper.map(book, BookDTO.class))
                 .toList();
     }
 
     @Override
     public List<BookDTO> getFilteredAndSortedBooks(
+            Long categoryId,
             Language language,
             AgeGroup ageGroup,
             BigDecimal minPrice,
             BigDecimal maxPrice,
             String searchTerm,
             Sort sort) {
-        
+
         Sort sortToUse = sort != null ? sort : Sort.unsorted();
-        
+
         List<Book> books = bookRepository.findByFilters(
-                language, 
-                ageGroup, 
-                minPrice, 
+                categoryId,
+                language,
+                ageGroup,
+                minPrice,
                 maxPrice,
                 searchTerm,
                 sortToUse
         );
-        
+
         return books.stream()
                 .map(book -> modelMapper.map(book, BookDTO.class))
                 .toList();
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Page<BookDTO> getFilteredAndSortedPage(Long categoryId, Language language, AgeGroup ageGroup, BigDecimal minPrice, BigDecimal maxPrice, String searchTerm, Pageable pageable) {
+        Page<Book> booksPage = bookRepository.findByFiltersPaged(
+                categoryId,
+                language,
+                ageGroup,
+                minPrice,
+                maxPrice,
+                searchTerm,
+                pageable
+        );
+        return booksPage.map(book -> modelMapper.map(book, BookDTO.class));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<BookSummaryDTO> getNewestBooksPaged(int page, int size) {
         Sort sort = Sort.by(Sort.Direction.DESC, "publicationDate");
         Pageable pageable = PageRequest.of(page, size, sort);
@@ -73,13 +91,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDTO getBookByName(String name) {
-        Book book = bookRepository.findByName(name)
+        Book book = bookRepository.findByNameWithCategories(name)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with name: " + name));
         return modelMapper.map(book, BookDTO.class);
     }
 
+    @Override
     public BookDTO getBookById(Long id) {
-        Book book = bookRepository.findById(id)
+        Book book = bookRepository.findByIdWithCategories(id)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + id));
         return modelMapper.map(book, BookDTO.class);
     }
@@ -89,7 +108,7 @@ public class BookServiceImpl implements BookService {
         if (ids == null || ids.isEmpty()) {
             return List.of();
         }
-        return bookRepository.findAllById(ids).stream()
+        return bookRepository.findAllByIdWithCategories(ids).stream()
                 .map(book -> modelMapper.map(book, BookDTO.class))
                 .toList();
     }
@@ -97,7 +116,7 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void updateBookByName(String name, BookDTO book) {
-        Book existingBook = bookRepository.findByName(name)
+        Book existingBook = bookRepository.findByNameWithCategories(name)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with name: " + name));
         modelMapper.map(book, existingBook);
         Set<Category> newCategories = categoryService.resolveCategoriesForUpdate(book.getCategories());
@@ -108,7 +127,7 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void updateBook(Long id, BookDTO book) {
-        Book existingBook = bookRepository.findById(id)
+        Book existingBook = bookRepository.findByIdWithCategories(id)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + id));
         modelMapper.map(book, existingBook);
         Set<Category> newCategories = categoryService.resolveCategoriesForUpdate(book.getCategories());
@@ -118,7 +137,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBookByName(String name) {
-        Book book = bookRepository.findByName(name)
+        Book book = bookRepository.findByNameWithCategories(name)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with name: " + name));
         bookRepository.delete(book);
     }

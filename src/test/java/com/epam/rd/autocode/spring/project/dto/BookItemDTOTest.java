@@ -72,16 +72,21 @@ public class BookItemDTOTest {
         final var parameters = Arrays.asList(constructor.getParameters());
 
         parameters.stream()
-                .filter(p -> p.getType().getTypeName().equals(Constants.STRING_TYPE))
+                .filter(p -> p.getType().getTypeName().equals(Constants.BOOK_DTO_TYPE))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No parameter with type " + Constants.STRING_TYPE));
+                .orElseThrow(() -> new RuntimeException("No parameter with type " + Constants.BOOK_DTO_TYPE));
 
         parameters.stream()
-                .filter(p -> p.getType().getTypeName().equals(Constants.INT_TYPE))
+                .filter(p -> p.getType().getTypeName().equals("int"))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No parameter with type " + Constants.INT_TYPE));
+                .orElseThrow(() -> new RuntimeException("No parameter with type int"));
 
-        assertEquals(2, parameters.size());
+        parameters.stream()
+                .filter(p -> p.getType().getTypeName().equals(Constants.BIG_DECIMAL_TYPE))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No parameter with type " + Constants.BIG_DECIMAL_TYPE));
+
+        assertEquals(Constants.BookItemDTO.PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS, parameters.size());
     }
 
     @Test
@@ -103,8 +108,10 @@ public class BookItemDTOTest {
     @DisplayName("Check field type and field name")
     @ParameterizedTest
     @CsvSource({
-            "java.lang.String, bookName, 1",
-            "java.lang.Integer, quantity, 1"
+            "com.epam.rd.autocode.spring.project.dto.BookDTO, book, 1",
+            "int, quantity, 1",
+            "java.math.BigDecimal, pricePerUnit, 1",
+            "java.math.BigDecimal, totalPrice, 1"
     })
     void checkNameFieldType(String fieldType, String fieldName, long expected) {
         var count = allFields.stream()

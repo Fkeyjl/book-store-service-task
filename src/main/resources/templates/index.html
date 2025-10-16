@@ -43,7 +43,10 @@
                         </div>
                     </a>
 
-                    <form th:action="@{/cart/add}" method="post" class="buy-form">
+                    <form sec:authorize="!hasAnyRole('ADMIN', 'EMPLOYEE')"
+                          th:action="@{/cart/add}" 
+                          method="post" 
+                          class="buy-form">
                         <input type="hidden" name="bookId" th:value="${book.id}"/>
                         <input type="hidden" name="quantity" value="1"/>
                         <button type="submit" class="buy-button">
@@ -64,7 +67,9 @@
 </section>
 <div class="categories-section">
     <div class="categories-container">
-        <a th:each="category : ${categories}" class="category-card-link">
+        <a th:each="category : ${categories}" 
+           th:href="@{/books(categoryId=${category.id})}" 
+           class="category-card-link">
             <div class="category-card">
                 <div class="category-card-content">
 
