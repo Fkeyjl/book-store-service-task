@@ -78,9 +78,8 @@
                      th:if="${book.categories != null and !book.categories.isEmpty()}">
                     <span class="info-label"><i class="fas fa-tags"></i> <span th:text="#{nav.categories} + ':'">Категорії:</span></span>
                     <div class="categories-list">
-                            <span th:each="category, iterStat : ${book.categories}" class="category-badge">
+                            <span th:each="category: ${book.categories}" class="category-badge">
                                 <span th:text="${category.name}">Категорія</span>
-                                <span th:if="${!iterStat.last}">, </span>
                             </span>
                     </div>
                 </div>

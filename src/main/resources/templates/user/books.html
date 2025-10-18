@@ -16,44 +16,52 @@
             <form th:action="@{/books}" method="get" id="filterForm">
                 <div class="filter-group">
                     <h4 th:text="#{common.search}">Пошук</h4>
-                    <input type="text" name="search" th:placeholder="#{common.search}"
-                           class="filter-input" th:value="${param.search}">
+                    <label>
+                        <input type="text" name="search" th:placeholder="#{common.search}"
+                               class="filter-input" th:value="${param.search}">
+                    </label>
                 </div>
 
                 <div class="filter-group">
                     <h4 th:text="#{nav.categories}">Категорія</h4>
-                    <select name="categoryId" class="filter-select">
-                        <option value="" th:text="#{filter.allCategories}">Усі категорії</option>
-                        <option th:each="category : ${categories}"
-                                th:value="${category.id}"
-                                th:text="${category.name}"
-                                th:selected="${param.categoryId != null and param.categoryId[0] == category.id.toString()}">
-                        </option>
-                    </select>
+                    <label>
+                        <select name="categoryId" class="filter-select">
+                            <option value="" th:text="#{filter.allCategories}">Усі категорії</option>
+                            <option th:each="category : ${categories}"
+                                    th:value="${category.id}"
+                                    th:text="${category.name}"
+                                    th:selected="${param.categoryId != null and param.categoryId[0] == category.id.toString()}">
+                            </option>
+                        </select>
+                    </label>
                 </div>
 
                 <div class="filter-group">
                     <h4 th:text="#{filter.language}">Мова</h4>
-                    <select name="language" class="filter-select">
-                        <option value="" th:text="#{filter.allLanguages}">Усі мови</option>
-                        <option th:each="lang : ${T(com.epam.rd.autocode.spring.project.model.enums.Language).values()}"
-                                th:value="${lang}"
-                                th:text="${lang.name()}"
-                                th:selected="${param.language != null and param.language[0] == lang.name()}">
-                        </option>
-                    </select>
+                    <label>
+                        <select name="language" class="filter-select">
+                            <option value="" th:text="#{filter.allLanguages}">Усі мови</option>
+                            <option th:each="lang : ${T(com.epam.rd.autocode.spring.project.model.enums.Language).values()}"
+                                    th:value="${lang}"
+                                    th:text="${lang.name()}"
+                                    th:selected="${param.language != null and param.language[0] == lang.name()}">
+                            </option>
+                        </select>
+                    </label>
                 </div>
 
                 <div class="filter-group">
                     <h4 th:text="#{filter.ageGroup}">Вікова група</h4>
-                    <select name="ageGroup" class="filter-select">
-                        <option value="" th:text="#{filter.allAgeGroups}">Усі групи</option>
-                        <option th:each="age : ${T(com.epam.rd.autocode.spring.project.model.enums.AgeGroup).values()}"
-                                th:value="${age}"
-                                th:text="${age.name()}"
-                                th:selected="${param.ageGroup != null and param.ageGroup[0] == age.name()}">
-                        </option>
-                    </select>
+                    <label>
+                        <select name="ageGroup" class="filter-select">
+                            <option value="" th:text="#{filter.allAgeGroups}">Усі групи</option>
+                            <option th:each="age : ${T(com.epam.rd.autocode.spring.project.model.enums.AgeGroup).values()}"
+                                    th:value="${age}"
+                                    th:text="${age.name()}"
+                                    th:selected="${param.ageGroup != null and param.ageGroup[0] == age.name()}">
+                            </option>
+                        </select>
+                    </label>
                 </div>
 
                 <div class="filter-group">

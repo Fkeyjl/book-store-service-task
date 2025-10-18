@@ -8,7 +8,6 @@ public class Constants {
     public static final String LANGUAGE_TYPE = "com.epam.rd.autocode.spring.project.model" + ".enums." + Language.ENUM_NAME;
     public static final String BOOK_DTO_TYPE = CLASS_PACKAGE + "." + BookDTO.class.getSimpleName();
     public static final String BOOK_ITEM_DTO_TYPE = CLASS_PACKAGE + "." + BookItemDTO.class.getSimpleName();
-    public static final String CLIENT_DTO_TYPE = CLASS_PACKAGE + "." + ClientDTO.class.getSimpleName();
     public static final String EMPLOYEE_DTO_TYPE = CLASS_PACKAGE + "." + EmployeeDTO.class.getSimpleName();
     public static final String ORDER_DTO_TYPE = CLASS_PACKAGE + "." + OrderDTO.class.getSimpleName();
 
@@ -37,13 +36,6 @@ public class Constants {
         public static final String CLASS_NAME = "BookItemDTO";
         public static final int CLASS_COUNT_FIELDS = 4;
         public static final int CLASS_COUNT_CONSTRUCTORS = 3;
-        public static final int PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS = 4;
-    }
-
-    static class ClientDTO {
-        public static final String CLASS_NAME = "ClientDTO";
-        public static final int CLASS_COUNT_FIELDS = 4;
-        public static final int CLASS_COUNT_CONSTRUCTORS = 2;
         public static final int PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS = 4;
     }
 

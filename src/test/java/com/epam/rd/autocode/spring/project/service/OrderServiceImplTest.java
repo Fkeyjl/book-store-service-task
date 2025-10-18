@@ -19,6 +19,7 @@ import org.modelmapper.ModelMapper;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,11 +43,10 @@ class OrderServiceImplTest {
 
     private Order testOrder;
     private OrderDTO testOrderDTO;
-    private User testUser;
 
     @BeforeEach
     void setUp() {
-        testUser = new User();
+        User testUser = new User();
         testUser.setId(1L);
         testUser.setEmail("test@example.com");
         testUser.setName("Test User");
@@ -124,7 +124,7 @@ class OrderServiceImplTest {
 
     @Test
     void testGetAllOrders_ShouldReturnAllOrders() {
-        when(orderRepository.findAll()).thenReturn(Arrays.asList(testOrder));
+        when(orderRepository.findAll()).thenReturn(Collections.singletonList(testOrder));
         when(modelMapper.map(any(Order.class), eq(OrderDTO.class))).thenReturn(testOrderDTO);
 
         List<OrderDTO> result = orderService.getAllOrders();

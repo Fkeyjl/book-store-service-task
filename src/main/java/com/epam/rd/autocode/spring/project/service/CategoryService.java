@@ -10,5 +10,6 @@ import java.util.Set;
 public interface CategoryService {
     List<CategoryDTO> getCategories();
     Page<CategoryDTO> getCategoriesPage(int page, int size);
-    Set<Category> resolveCategoriesForUpdate(Set<CategoryDTO> categoriesFromDto);
+    CategoryDTO getCategoryById(Long id);
+    Set<Category> resolveCategoriesForInsert(Set<CategoryDTO> categoriesFromDto);
 }

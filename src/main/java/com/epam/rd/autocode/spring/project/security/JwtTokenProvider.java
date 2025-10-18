@@ -1,4 +1,4 @@
-package com.epam.rd.autocode.spring.project.utils;
+package com.epam.rd.autocode.spring.project.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ClaimsBuilder;
@@ -43,8 +43,12 @@ public class JwtTokenProvider {
     }
 
     public String generateRefreshToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         ClaimsBuilder claims = Jwts.claims().subject(authentication.getName()).id(user.getId().toString());
+        claims.add("role", authorities);
         claims.add("type", "refresh");
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshTokenExpirationInMs);

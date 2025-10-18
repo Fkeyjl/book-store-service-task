@@ -12,9 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.lenient;
 
-/**
- * Unit tests for SimpleLoggingAspect
- */
 @ExtendWith(MockitoExtension.class)
 class LoggingAspectTest {
 

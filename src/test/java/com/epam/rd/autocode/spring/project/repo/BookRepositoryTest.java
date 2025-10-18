@@ -26,13 +26,9 @@ class BookRepositoryTest {
     @Autowired
     private BookRepository bookRepository;
 
-    private Book testBook1;
-    private Book testBook2;
-    private Book testBook3;
-
     @BeforeEach
     void setUp() {
-        testBook1 = new Book();
+        Book testBook1 = new Book();
         testBook1.setName("Test Book 1");
         testBook1.setAuthor("Author One");
         testBook1.setIsbn("978-0-123456-47-2");
@@ -43,7 +39,7 @@ class BookRepositoryTest {
         testBook1.setPages(200);
         entityManager.persist(testBook1);
 
-        testBook2 = new Book();
+        Book testBook2 = new Book();
         testBook2.setName("Test Book 2");
         testBook2.setAuthor("Author Two");
         testBook2.setIsbn("978-0-123456-48-9");
@@ -54,7 +50,7 @@ class BookRepositoryTest {
         testBook2.setPages(150);
         entityManager.persist(testBook2);
 
-        testBook3 = new Book();
+        Book testBook3 = new Book();
         testBook3.setName("Another Book");
         testBook3.setAuthor("Different Author");
         testBook3.setIsbn("978-0-123456-49-6");

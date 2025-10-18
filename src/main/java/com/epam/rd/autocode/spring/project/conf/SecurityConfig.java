@@ -1,6 +1,6 @@
 package com.epam.rd.autocode.spring.project.conf;
 
-import com.epam.rd.autocode.spring.project.utils.CookieBearerTokenResolver;
+import com.epam.rd.autocode.spring.project.security.CookieBearerTokenResolver;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -89,23 +88,9 @@ public class SecurityConfig{
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/profile/**").authenticated()
                         .requestMatchers("/orders/**").hasAnyRole("EMPLOYEE", "ADMIN")
+                        .requestMatchers("/management/**").hasAnyRole("EMPLOYEE", "ADMIN")
                         .anyRequest().authenticated()
                 )
-//                .exceptionHandling(exception -> exception
-//                        .authenticationEntryPoint((request, response, authException) -> response.sendRedirect("/login"))
-//                        .accessDeniedHandler((request, response, accessDeniedException) -> {
-//                            if (request.getUserPrincipal() == null) {
-//                                response.sendRedirect("/login");
-//                            } else {
-//                                response.sendRedirect("/error");
-//                            }
-//                        })
-//                )
-                //Delete after testing
-                .headers(headers -> headers
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-                )
-                //
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(logout -> logout
                         .logoutUrl("/logout")

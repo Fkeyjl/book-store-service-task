@@ -72,25 +72,21 @@ public class EmployeeDTOTest {
 
         final var parameters = Arrays.asList(constructor.getParameters());
 
-        // Check for Long id
         parameters.stream()
                 .filter(p -> p.getType().getTypeName().equals("java.lang.Long"))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("No parameter with type java.lang.Long"));
 
-        // Check for String (email, name, phone)
         long stringCount = parameters.stream()
                 .filter(p -> p.getType().getTypeName().equals(Constants.STRING_TYPE))
                 .count();
         assertEquals(3, stringCount, "Should have 3 String parameters (email, name, phone)");
 
-        // Check for LocalDate
         parameters.stream()
                 .filter(p -> p.getType().getTypeName().equals(Constants.LOCAL_DATE_TYPE))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("No parameter with type " + Constants.LOCAL_DATE_TYPE));
 
-        // Check for boolean
         parameters.stream()
                 .filter(p -> p.getType().getTypeName().equals("boolean"))
                 .findFirst()

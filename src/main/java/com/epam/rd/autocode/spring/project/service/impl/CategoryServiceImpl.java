@@ -4,6 +4,7 @@ import com.epam.rd.autocode.spring.project.dto.CategoryDTO;
 import com.epam.rd.autocode.spring.project.model.Category;
 import com.epam.rd.autocode.spring.project.repo.CategoryRepository;
 import com.epam.rd.autocode.spring.project.service.CategoryService;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +44,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Set<Category> resolveCategoriesForUpdate(Set<CategoryDTO> categoriesFromDto) {
+    public CategoryDTO getCategoryById(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + id));
+        return modelMapper.map(category, CategoryDTO.class);
+    }
+
+    @Override
+    public Set<Category> resolveCategoriesForInsert(Set<CategoryDTO> categoriesFromDto) {
         if (categoriesFromDto == null || categoriesFromDto.contains(null) || categoriesFromDto.isEmpty()) {
             return Collections.emptySet();
         }

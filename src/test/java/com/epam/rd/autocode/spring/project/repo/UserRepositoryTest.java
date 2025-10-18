@@ -24,12 +24,9 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private User testCustomer;
-    private User testEmployee;
-
     @BeforeEach
     void setUp() {
-        testCustomer = new User();
+        User testCustomer = new User();
         testCustomer.setName("John Customer");
         testCustomer.setEmail("customer@example.com");
         testCustomer.setPassword("password123");
@@ -40,7 +37,7 @@ class UserRepositoryTest {
         testCustomer.setIsBlocked(false);
         entityManager.persist(testCustomer);
 
-        testEmployee = new User();
+        User testEmployee = new User();
         testEmployee.setName("Jane Employee");
         testEmployee.setEmail("employee@example.com");
         testEmployee.setPassword("password456");

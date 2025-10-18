@@ -1,4 +1,4 @@
-package com.epam.rd.autocode.spring.project.utils;
+package com.epam.rd.autocode.spring.project.security;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

@@ -4,7 +4,7 @@ import com.epam.rd.autocode.spring.project.dto.LoginRequest;
 import com.epam.rd.autocode.spring.project.dto.UserRegistrationDTO;
 import com.epam.rd.autocode.spring.project.exception.AlreadyExistException;
 import com.epam.rd.autocode.spring.project.service.UserService;
-import com.epam.rd.autocode.spring.project.utils.JwtTokenProvider;
+import com.epam.rd.autocode.spring.project.security.JwtTokenProvider;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

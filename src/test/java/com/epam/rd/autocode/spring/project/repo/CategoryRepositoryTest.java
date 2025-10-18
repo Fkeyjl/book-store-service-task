@@ -27,16 +27,13 @@ class CategoryRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    private Category fictionCategory;
-    private Category scienceCategory;
-
     @BeforeEach
     void setUp() {
-        fictionCategory = new Category();
+        Category fictionCategory = new Category();
         fictionCategory.setName("Fiction");
         entityManager.persist(fictionCategory);
 
-        scienceCategory = new Category();
+        Category scienceCategory = new Category();
         scienceCategory.setName("Science");
         entityManager.persist(scienceCategory);
 

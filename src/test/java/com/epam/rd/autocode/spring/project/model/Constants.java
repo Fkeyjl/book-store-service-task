@@ -6,8 +6,6 @@ public class Constants {
     public static final String LANGUAGE_TYPE = CLASS_PACKAGE + ".enums." + Language.ENUM_NAME;
     public static final String BOOK_TYPE = CLASS_PACKAGE + "." + Book.CLASS_NAME;
     public static final String BOOK_ITEM_TYPE = CLASS_PACKAGE + "." + BookItem.CLASS_NAME;
-    public static final String CLIENT_TYPE = CLASS_PACKAGE + "." + Client.CLASS_NAME;
-    public static final String EMPLOYEE_TYPE = CLASS_PACKAGE + "." + Employee.CLASS_NAME;
     public static final String ORDER_TYPE = CLASS_PACKAGE + "." + Order.CLASS_NAME;
     public static final String USER_TYPE = CLASS_PACKAGE + "." + User.CLASS_NAME;
     public static final String LONG_TYPE = "java.lang.Long";
@@ -51,20 +49,6 @@ public class Constants {
         public static final int CLASS_COUNT_FIELDS = 5;
         public static final int CLASS_COUNT_CONSTRUCTORS = 2;
         public static final int PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS = CLASS_COUNT_FIELDS;
-    }
-
-    static class Client {
-        public static final String CLASS_NAME = "Client";
-        public static final int CLASS_COUNT_FIELDS = 1;
-        public static final int CLASS_COUNT_CONSTRUCTORS = 2;
-        public static final int PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS = 5;
-    }
-
-    static class Employee {
-        public static final String CLASS_NAME = "Employee";
-        public static final int CLASS_COUNT_FIELDS = 2;
-        public static final int CLASS_COUNT_CONSTRUCTORS = 2;
-        public static final int PARAMETERS_IN_CONSTRUCTOR_WITH_PARAMETERS = 6;
     }
 
     static class Order {

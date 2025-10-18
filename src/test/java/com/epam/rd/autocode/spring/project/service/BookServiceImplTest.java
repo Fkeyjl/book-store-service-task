@@ -77,7 +77,7 @@ class BookServiceImplTest {
 
     @Test
     void testGetAllBooks_ShouldReturnAllBooks() {
-        List<Book> books = Arrays.asList(testBook);
+        List<Book> books = Collections.singletonList(testBook);
         when(bookRepository.findAllWithCategories()).thenReturn(books);
         when(modelMapper.map(any(Book.class), eq(BookDTO.class))).thenReturn(testBookDTO);
 
@@ -176,7 +176,7 @@ class BookServiceImplTest {
 
     @Test
     void testGetFilteredAndSortedBooks_WithFilters_ShouldReturnFilteredBooks() {
-        List<Book> books = Arrays.asList(testBook);
+        List<Book> books = Collections.singletonList(testBook);
         when(bookRepository.findByFilters(
                 isNull(),
                 eq(Language.UKRAINIAN),
@@ -217,7 +217,7 @@ class BookServiceImplTest {
         testBookDTO.setCategories(categoriesDTO);
 
         when(bookRepository.findByIdWithCategories(1L)).thenReturn(Optional.of(testBook));
-        when(categoryService.resolveCategoriesForUpdate(anySet())).thenReturn(new HashSet<>(Arrays.asList(category)));
+        when(categoryService.resolveCategoriesForInsert(anySet())).thenReturn(new HashSet<>(List.of(category)));
         when(bookRepository.save(any(Book.class))).thenReturn(testBook);
 
         bookService.updateBook(1L, testBookDTO);

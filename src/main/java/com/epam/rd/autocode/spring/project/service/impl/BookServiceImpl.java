@@ -119,7 +119,7 @@ public class BookServiceImpl implements BookService {
         Book existingBook = bookRepository.findByNameWithCategories(name)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with name: " + name));
         modelMapper.map(book, existingBook);
-        Set<Category> newCategories = categoryService.resolveCategoriesForUpdate(book.getCategories());
+        Set<Category> newCategories = categoryService.resolveCategoriesForInsert(book.getCategories());
         existingBook.setCategories(newCategories);
         bookRepository.save(existingBook);
     }
@@ -130,7 +130,7 @@ public class BookServiceImpl implements BookService {
         Book existingBook = bookRepository.findByIdWithCategories(id)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + id));
         modelMapper.map(book, existingBook);
-        Set<Category> newCategories = categoryService.resolveCategoriesForUpdate(book.getCategories());
+        Set<Category> newCategories = categoryService.resolveCategoriesForInsert(book.getCategories());
         existingBook.setCategories(newCategories);
         bookRepository.save(existingBook);
     }
@@ -155,6 +155,8 @@ public class BookServiceImpl implements BookService {
         }
         Book newBook = new Book();
         modelMapper.map(bookDTO, newBook);
+        Set<Category> categories = categoryService.resolveCategoriesForInsert(bookDTO.getCategories());
+        newBook.setCategories(categories);
         bookRepository.save(newBook);
     }
 }

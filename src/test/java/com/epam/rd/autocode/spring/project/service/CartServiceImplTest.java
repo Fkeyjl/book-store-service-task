@@ -111,8 +111,8 @@ class CartServiceImplTest {
         book2.setId(2L);
         book2.setPrice(BigDecimal.valueOf(15.00));
 
-        testCart.getItems().put(1L, 2); // 2 * 10 = 20
-        testCart.getItems().put(2L, 3); // 3 * 15 = 45
+        testCart.getItems().put(1L, 2);
+        testCart.getItems().put(2L, 3);
 
         when(bookService.getBooksByIds(anyList())).thenReturn(List.of(book1, book2));
 
