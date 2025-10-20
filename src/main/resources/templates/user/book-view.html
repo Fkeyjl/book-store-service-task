@@ -7,7 +7,7 @@
     <title th:text="${book.name} + ' - ' + #{app.name}">Книга - Книжковий магазин</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/book-view.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 <div th:replace="~{layouts/header.html::header}"></div>
@@ -34,9 +34,11 @@
             </div>
 
             <div sec:authorize="hasAnyRole('EMPLOYEE', 'ADMIN')" class="admin-actions">
-                <a th:href="@{/books/{id}/edit(id=${book.id})}" class="edit-button">
-                    <i class="fas fa-edit"></i> <span th:text="#{common.edit}">Редагувати</span>
-                </a>
+                <form class="add-to-cart-form">
+                    <a th:href="@{/books/{id}/edit(id=${book.id})}" class="edit-button">
+                        <i class="fas fa-edit"></i> <span th:text="#{common.edit}">Редагувати</span>
+                    </a>
+                </form>
             </div>
         </div>
 

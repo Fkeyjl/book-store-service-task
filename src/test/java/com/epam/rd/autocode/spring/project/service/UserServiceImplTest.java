@@ -5,6 +5,7 @@ import com.epam.rd.autocode.spring.project.dto.UserRegistrationDTO;
 import com.epam.rd.autocode.spring.project.model.User;
 import com.epam.rd.autocode.spring.project.model.enums.Role;
 import com.epam.rd.autocode.spring.project.repo.UserRepository;
+import com.epam.rd.autocode.spring.project.service.impl.AuthenticationServiceImpl;
 import com.epam.rd.autocode.spring.project.service.impl.UserServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +43,9 @@ class UserServiceImplTest {
 
     @InjectMocks
     private UserServiceImpl userService;
+
+    @InjectMocks
+    private AuthenticationServiceImpl authenticationService;
 
     private User testUser;
     private CustomerDTO testCustomerDTO;
@@ -176,7 +180,7 @@ class UserServiceImplTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(userRepository.save(any(User.class))).thenReturn(testUser);
 
-        userService.blockUser(1L);
+        authenticationService.blockUser(1L);
 
         assertThat(testUser.getIsBlocked()).isTrue();
         verify(userRepository, times(1)).findById(1L);
@@ -189,7 +193,7 @@ class UserServiceImplTest {
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
         when(userRepository.save(any(User.class))).thenReturn(testUser);
 
-        userService.unblockUser(1L);
+        authenticationService.unblockUser(1L);
 
         assertThat(testUser.getIsBlocked()).isFalse();
         verify(userRepository, times(1)).findById(1L);

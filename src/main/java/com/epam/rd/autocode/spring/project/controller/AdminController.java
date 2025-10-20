@@ -2,6 +2,7 @@ package com.epam.rd.autocode.spring.project.controller;
 
 import com.epam.rd.autocode.spring.project.dto.EmployeeDTO;
 import com.epam.rd.autocode.spring.project.dto.UserUpdateDTO;
+import com.epam.rd.autocode.spring.project.service.AuthenticationService;
 import com.epam.rd.autocode.spring.project.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
     @GetMapping("/employees")
     public String showAllEmployees(Model model) {
@@ -69,7 +71,7 @@ public class AdminController {
     @PostMapping("/employees/{id}/block")
     public String blockEmployee(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
-            userService.blockUser(id);
+            authenticationService.blockUser(id);
             redirectAttributes.addFlashAttribute("successMessage", "Робітника заблоковано");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Помилка блокування: " + e.getMessage());
@@ -80,7 +82,7 @@ public class AdminController {
     @PostMapping("/employees/{id}/unblock")
     public String unblockEmployee(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
-            userService.unblockUser(id);
+            authenticationService.unblockUser(id);
             redirectAttributes.addFlashAttribute("successMessage", "Робітника розблоковано");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Помилка розблокування: " + e.getMessage());

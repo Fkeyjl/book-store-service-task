@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="uk"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/index.css}">
     <link rel="stylesheet" th:href="@{/css/categories.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 <div th:replace="~{layouts/header.html::header}"></div>
@@ -44,8 +45,8 @@
                     </a>
 
                     <form sec:authorize="!hasAnyRole('ADMIN', 'EMPLOYEE')"
-                          th:action="@{/cart/add}" 
-                          method="post" 
+                          th:action="@{/cart/add}"
+                          method="post"
                           class="buy-form">
                         <input type="hidden" name="bookId" th:value="${book.id}"/>
                         <input type="hidden" name="quantity" value="1"/>
@@ -67,8 +68,8 @@
 </section>
 <div class="categories-section">
     <div class="categories-container">
-        <a th:each="category : ${categories}" 
-           th:href="@{/books(categoryId=${category.id})}" 
+        <a th:each="category : ${categories}"
+           th:href="@{/books(categoryId=${category.id})}"
            class="category-card-link">
             <div class="category-card">
                 <div class="category-card-content">

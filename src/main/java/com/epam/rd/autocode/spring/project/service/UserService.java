@@ -20,6 +20,4 @@ public interface UserService {
     User updateUserBalance(Long userId, BigDecimal amount);
     User addUserBalance(Long userId, BigDecimal amount);
     void deleteUser(Long userId);
-    void blockUser(Long userId);
-    void unblockUser(Long userId);
 }

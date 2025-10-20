@@ -26,6 +26,9 @@ public class BaseConfig {
                     if (destination.getIsBlocked() == null) {
                         destination.setIsBlocked(false);
                     }
+                    if (destination.getFailedLoginAttempts() == null) {
+                        destination.setFailedLoginAttempts(0);
+                    }
                     return destination;
                 });
         return modelMapper;

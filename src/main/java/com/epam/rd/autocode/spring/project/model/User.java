@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -47,4 +48,10 @@ public class User {
 
     @Column(nullable = false)
     private Boolean isBlocked;
+
+    @Column
+    private LocalDateTime lockTime;
+
+    @Column(nullable = false, name = "failed_attempts")
+    private Integer failedLoginAttempts;
 }

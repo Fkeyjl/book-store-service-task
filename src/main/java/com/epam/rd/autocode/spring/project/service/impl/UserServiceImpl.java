@@ -110,22 +110,4 @@ public class UserServiceImpl implements UserService {
         userToUpdate.setBalance(userToUpdate.getBalance().add(amount));
         return userRepository.save(userToUpdate);
     }
-
-    @Override
-    @Transactional
-    public void blockUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with ID " + userId + " not found"));
-        user.setIsBlocked(true);
-        userRepository.save(user);
-    }
-
-    @Override
-    @Transactional
-    public void unblockUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with ID " + userId + " not found"));
-        user.setIsBlocked(false);
-        userRepository.save(user);
-    }
 }

@@ -6,7 +6,7 @@
     <title th:text="#{book.create} + ' - ' + #{app.name}">Створити книгу - Книжковий магазин</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/create-book.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 <div th:replace="~{layouts/header.html::header}"></div>
@@ -74,10 +74,12 @@
             <label>Категорії</label>
             <div class="checkbox-group">
                 <div th:each="category : ${allCategories}">
-                    <input type="checkbox"
-                           th:id="${'cat_' + category.id}"
-                           th:field="*{categories}"
-                           th:value="${category.id}"/>
+                    <label>
+                        <input type="checkbox"
+                               th:id="${'cat_' + category.id}"
+                               th:field="*{categories}"
+                               th:value="${category.id}"/>
+                    </label>
                     <label th:for="${'cat_' + category.id}" th:text="${category.name}">Категорія</label>
                 </div>
             </div>

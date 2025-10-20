@@ -1,6 +1,8 @@
 package com.epam.rd.autocode.spring.project.conf;
 
 import com.epam.rd.autocode.spring.project.security.CookieBearerTokenResolver;
+import com.epam.rd.autocode.spring.project.security.CustomJwtValidator;
+import com.epam.rd.autocode.spring.project.security.JwtRefreshFilter;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +19,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.crypto.SecretKey;
@@ -31,6 +38,8 @@ import javax.crypto.SecretKey;
 @RequiredArgsConstructor
 public class SecurityConfig{
     private final CookieBearerTokenResolver cookieBearerTokenResolver;
+    private final CustomJwtValidator customJwtValidator;
+    private final JwtRefreshFilter jwtRefreshFilter;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -45,7 +54,14 @@ public class SecurityConfig{
     @Bean
     public JwtDecoder jwtDecoder(@Value("${jwt.secret}") String jwtSecret) {
         SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
-        return NimbusJwtDecoder.withSecretKey(key).build();
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withSecretKey(key).build();
+        OAuth2TokenValidator<Jwt> defaultValidators = JwtValidators.createDefault();
+        OAuth2TokenValidator<Jwt> validators = new DelegatingOAuth2TokenValidator<>(
+                defaultValidators,
+                customJwtValidator
+        );
+        jwtDecoder.setJwtValidator(validators);
+        return jwtDecoder;
     }
 
     @Bean
@@ -65,6 +81,7 @@ public class SecurityConfig{
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+                .addFilterBefore(jwtRefreshFilter, BearerTokenAuthenticationFilter.class)
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
                         .bearerTokenResolver(cookieBearerTokenResolver)

@@ -96,7 +96,7 @@ class CategoryServiceImplTest {
         when(categoryRepository.existsById(2L)).thenReturn(true);
         when(categoryRepository.findAllById(categoryIds)).thenReturn(Arrays.asList(category1, category2));
 
-        Set<Category> result = categoryService.resolveCategoriesForUpdate(categoryDTOs);
+        Set<Category> result = categoryService.resolveCategoriesForInsert(categoryDTOs);
 
         assertThat(result).hasSize(2);
         assertThat(result).contains(category1, category2);
@@ -106,7 +106,7 @@ class CategoryServiceImplTest {
 
     @Test
     void testResolveCategoriesForUpdate_WithNullCategories_ShouldReturnEmptySet() {
-        Set<Category> result = categoryService.resolveCategoriesForUpdate(null);
+        Set<Category> result = categoryService.resolveCategoriesForInsert(null);
 
         assertThat(result).isEmpty();
         verify(categoryRepository, never()).existsById(anyLong());
@@ -117,7 +117,7 @@ class CategoryServiceImplTest {
     void testResolveCategoriesForUpdate_WithEmptyCategories_ShouldReturnEmptySet() {
         Set<CategoryDTO> emptySet = new HashSet<>();
 
-        Set<Category> result = categoryService.resolveCategoriesForUpdate(emptySet);
+        Set<Category> result = categoryService.resolveCategoriesForInsert(emptySet);
 
         assertThat(result).isEmpty();
         verify(categoryRepository, never()).existsById(anyLong());
@@ -132,7 +132,7 @@ class CategoryServiceImplTest {
         when(categoryRepository.existsById(2L)).thenReturn(false);
         when(categoryRepository.findAllById(Set.of(1L))).thenReturn(Collections.singletonList(category1));
 
-        Set<Category> result = categoryService.resolveCategoriesForUpdate(categoryDTOs);
+        Set<Category> result = categoryService.resolveCategoriesForInsert(categoryDTOs);
 
         assertThat(result).hasSize(1);
         assertThat(result).contains(category1);

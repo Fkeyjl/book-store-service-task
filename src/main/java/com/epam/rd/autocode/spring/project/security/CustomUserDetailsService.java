@@ -23,6 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                         user.getEmail(),
                         user.getPassword(),
                         Set.of(new SimpleGrantedAuthority(user.getRole().name())),
+                        user.getLockTime(),
                         user.getIsBlocked()
                 ))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));

@@ -1,7 +1,9 @@
 package com.epam.rd.autocode.spring.project.controller;
 
 import com.epam.rd.autocode.spring.project.dto.CustomerDTO;
+import com.epam.rd.autocode.spring.project.service.AuthenticationService;
 import com.epam.rd.autocode.spring.project.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,12 +16,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/management")
+@RequiredArgsConstructor
 public class EmployeeController {
     private final UserService userService;
-
-    public EmployeeController(UserService userService) {
-        this.userService = userService;
-    }
+    private final AuthenticationService authenticationService;
 
     @GetMapping("/users")
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
@@ -32,14 +32,14 @@ public class EmployeeController {
     @PostMapping("/users/{id}/block")
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
     public String blockClient(@PathVariable Long id) {
-        userService.blockUser(id);
+        authenticationService.blockUser(id);
         return "redirect:/management/users";
     }
 
     @PostMapping("/users/{id}/unblock")
     @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
     public String unblockClient(@PathVariable Long id) {
-        userService.unblockUser(id);
+        authenticationService.unblockUser(id);
         return "redirect:/management/users";
     }
 }
